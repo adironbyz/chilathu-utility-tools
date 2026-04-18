@@ -278,7 +278,7 @@ export default function TinhTienDien() {
   const hasPrevious = !!rates.previous
 
   return (
-    <div className="ttd-page">
+    <div className="ttd-page notebook-bg">
       {/* Header */}
       <header className="ttd-header">
         <Logo />

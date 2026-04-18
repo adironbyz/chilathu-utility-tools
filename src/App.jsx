@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './pages/Home/Home.jsx'
 import TinhTienDien from './pages/TinhTienDien/TinhTienDien.jsx'
+import TinhTienNuoc from './pages/TinhTienNuoc/TinhTienNuoc.jsx'
 
 export default function App() {
   return (
@@ -8,6 +9,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/tinh-tien-dien" element={<TinhTienDien />} />
+        <Route path="/tinh-tien-nuoc" element={<TinhTienNuoc />} />
         {/* thêm tools mới ở đây */}
       </Routes>
     </BrowserRouter>
