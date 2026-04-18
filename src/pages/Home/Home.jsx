@@ -125,7 +125,7 @@ export default function Home() {
   return (
     <div className="home-page">
       <SEO
-        title="Công cụ tài chính cá nhân miễn phí cho người Việt"
+        title="Tính tiền điện, nước, lương Net, lãi vay — miễn phí cho người Việt"
         description="Tính tiền điện EVN, tiền nước 63 tỉnh thành, lương Net, lãi vay, chia bill... 12 công cụ tính nhanh miễn phí. Không cần đăng nhập, kết quả tức thì."
         path="/"
         keywords="tính tiền điện, tính tiền nước, tính lương net, công cụ tài chính cá nhân, tính lãi vay, chia tiền nhóm"
