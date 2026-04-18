@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap');
+
+/* m-header-logo — Caveat 22px/700, --m-green */
+.m-header-logo {
+  font-family: 'Caveat', cursive;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--m-green);
+  text-decoration: none;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.m-header-logo__thu {
+  color: var(--m-ink);
+}

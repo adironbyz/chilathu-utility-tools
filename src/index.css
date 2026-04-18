@@ -1,0 +1,60 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ─── Notebook Design System tokens ─── */
+:root {
+  --m-surface:      #F7F7F5;
+  --m-card:         #ffffff;
+  --m-ink:          #18181b;
+  --m-ink-secondary:#52525b;
+  --m-muted:        #a1a1aa;
+  --m-divider:      #f0f0ef;
+  --m-border:       #e4e4e7;
+  --m-subtle:       #f4f4f5;
+  --m-dash:         #ebebeb;
+
+  --m-green:        #48A887;
+  --m-green-dark:   #3a8a6e;
+  --m-green-bg:     #f0fdfb;
+  --m-green-border: #86e8c6;
+
+  --m-red:          #C1666B;
+  --m-red-bg:       #fdf0f1;
+  --m-red-border:   #e8aaad;
+
+  --m-warning:      #D4B483;
+  --m-warning-bg:   #fdf8f0;
+  --m-warning-border:#e8d0a0;
+
+  --m-orange:       #c2410c;
+  --m-blue:         #007aff;
+
+  --m-radius-sm:    8px;
+  --m-radius-md:    12px;
+  --m-radius-item:  14px;
+  --m-radius-input: 18px;
+  --m-radius-sheet: 28px;
+  --m-radius-pill:  20px;
+
+  --m-dur-micro:    150ms;
+  --m-dur-fast:     200ms;
+  --m-dur-normal:   300ms;
+  --m-ease-ios:     cubic-bezier(0.32, 0.72, 0, 1);
+  --m-ease-out:     cubic-bezier(0.0, 0.0, 0.2, 1);
+}
+
+html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: system-ui, -apple-system, 'Helvetica Neue', 'Segoe UI', sans-serif;
+  background: var(--m-surface);
+  color: var(--m-ink);
+  line-height: 1.5;
+  min-height: 100dvh;
+}
+
+input[type=number] { -moz-appearance: textfield; }
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+button { cursor: pointer; border: none; background: none; font: inherit; }
+a { color: inherit; }

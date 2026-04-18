@@ -1,0 +1,149 @@
+/* ─── Overlay ─── */
+.tmenu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  z-index: 200;
+  pointer-events: none;
+  transition: background var(--m-dur-normal) var(--m-ease-out);
+}
+
+.tmenu-overlay.open {
+  background: rgba(0, 0, 0, 0.4);
+  pointer-events: all;
+}
+
+/* ─── Sheet ─── */
+.tmenu-sheet {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--m-card);
+  border-radius: var(--m-radius-sheet) var(--m-radius-sheet) 0 0;
+  padding-bottom: env(safe-area-inset-bottom, 16px);
+  transform: translateY(100%);
+  transition: transform var(--m-dur-normal) var(--m-ease-ios);
+  max-height: 85dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.tmenu-overlay.open .tmenu-sheet {
+  transform: translateY(0);
+}
+
+/* ─── Handle ─── */
+.tmenu-handle {
+  width: 36px;
+  height: 4px;
+  background: var(--m-border);
+  border-radius: 2px;
+  margin: 10px auto 0;
+}
+
+/* ─── Header ─── */
+.tmenu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px 12px;
+}
+
+.tmenu-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--m-ink);
+  letter-spacing: -0.2px;
+}
+
+.tmenu-close {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--m-subtle);
+  color: var(--m-muted);
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ─── Grid ─── */
+.tmenu-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  padding: 4px 14px 16px;
+}
+
+/* ─── Tool item ─── */
+.tmenu-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 6px;
+  border-radius: var(--m-radius-md);
+  background: var(--m-subtle);
+  border: 1.5px solid transparent;
+  position: relative;
+  transition: all var(--m-dur-micro);
+  min-height: 72px;
+}
+
+.tmenu-item:active:not(:disabled) {
+  background: var(--m-green-bg);
+  border-color: var(--m-green-border);
+}
+
+.tmenu-item.active {
+  background: var(--m-green-bg);
+  border-color: var(--m-green-border);
+}
+
+.tmenu-item.unavailable {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.tmenu-item-emoji {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.tmenu-item-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--m-ink-secondary);
+  text-align: center;
+  line-height: 1.3;
+  word-break: keep-all;
+}
+
+.tmenu-item.active .tmenu-item-label {
+  color: var(--m-green-dark);
+}
+
+/* "Sắp ra" badge */
+.tmenu-item-soon {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 8px;
+  font-weight: 700;
+  color: var(--m-muted);
+  background: var(--m-dash);
+  border-radius: 4px;
+  padding: 1px 4px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+/* ─── Footer ─── */
+.tmenu-footer {
+  padding: 0 18px 16px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--m-muted);
+}

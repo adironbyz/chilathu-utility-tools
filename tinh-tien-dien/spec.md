@@ -1,20 +1,23 @@
 # Feature: Tính Tiền Điện EVN
 
-> **Status:** Draft v3 — mở rộng scope toàn bộ nhóm khách hàng
+> **Status:** Draft v4 — data verified từ QĐ 1279, xác định use case TOU
 > **Created:** 2026-04-18
+> **Updated:** 2026-04-18
 > **URL:** `tools.chilathu.com/tinh-tien-dien`
 > **Summary:** Công cụ tính tiền điện phổ quát theo QĐ 1279/QĐ-BCT 2025 — hỗ trợ tất cả nhóm khách hàng: sinh hoạt, kinh doanh (TOU), sản xuất công nghiệp (TOU), nông nghiệp, hành chính sự nghiệp. Hardcode giá từ văn bản pháp lý, không cần backend, build 1 lần dùng lâu dài.
 
 ---
 
-## Thay đổi so với Draft v2
+## Thay đổi so với Draft v3
 
 | Quyết định | Lý do |
 |------------|-------|
-| ✅ Thêm kinh doanh (TOU) | Tool phổ quát, hardcode 1 lần, không cần maintain |
-| ✅ Thêm sản xuất công nghiệp (TOU) | Cùng lý do — data có sẵn từ QĐ 1279 |
-| ✅ Thêm nông nghiệp, hành chính SN | Đủ nhóm khách hàng EVN |
-| ✅ Thêm lại selector vùng miền | Áp dụng cho nhóm kinh doanh và sản xuất |
+| ✅ Verify toàn bộ bảng giá từ ảnh chính thức QĐ 1279 | Xóa tất cả ⚠️ "cần verify" — data đã đầy đủ |
+| ✅ Kinh doanh: 3 cấp điện áp (bỏ cấp 110kV) | QĐ 1279 không có tier 110kV cho kinh doanh |
+| ✅ Xác định use case TOU: kiểm tra hóa đơn, không phải dự trù | Xem chi tiết phần TOU bên dưới |
+| ✅ Bỏ affiliate card | Thay bằng footer 1 dòng text link |
+| ✅ Bar chart hiển thị tiền (đ) thay vì kWh | Tiền mới trả lời đúng câu hỏi của user |
+| ✅ TOU input: row layout (label | input) thay vì 3-column grid | Label time range dài bị wrap trong grid |
 
 ---
 
@@ -73,15 +76,22 @@
 
 Input: kWh thấp điểm / bình thường / cao điểm (3 ô)
 
+> **QĐ 1279 chỉ có 3 cấp điện áp cho kinh doanh** — không có tier 110kV như sản xuất.
+
 | Cấp điện áp | Thấp điểm | Bình thường | Cao điểm |
 |-------------|-----------|-------------|----------|
-| Dưới 6kV | 1.829 đ | 3.108 đ | 5.202 đ |
-| 6kV – dưới 22kV | ⚠️ cần verify | ⚠️ | ⚠️ |
-| 22kV – dưới 110kV | ⚠️ cần verify | ⚠️ | ⚠️ |
-| Từ 110kV trở lên | ⚠️ cần verify | ⚠️ | ⚠️ |
+| Từ 22kV trở lên | 1.609 đ | 2.887 đ | 5.025 đ |
+| 6kV – dưới 22kV | 1.829 đ | 3.108 đ | 5.202 đ |
+| Dưới 6kV | 1.918 đ | 3.152 đ | 5.422 đ |
 
-- Cao điểm cao nhất: 5.422 đ/kWh (cần verify chính xác vs 5.202)
-- Phổ biến nhất cho hộ kinh doanh nhỏ: dưới 6kV
+- Phổ biến nhất cho hộ kinh doanh nhỏ: **dưới 6kV**
+- Chưa VAT. VAT 8% tính trên tổng 3 khung giờ.
+
+> **Use case: kiểm tra hóa đơn — không phải dự trù chi phí**
+>
+> 3 con số kWh (thấp điểm / bình thường / cao điểm) user nhập vào đây chính là số liệu EVN ghi trên **hóa đơn tiền điện hàng tháng** — không phải user tự tính hay ước lượng. Mục đích: user dùng tool để verify lại tổng tiền EVN tính có đúng không.
+>
+> Dự trù chi phí điện TOU (trước khi có hóa đơn) là use case khác — đòi hỏi biết được profile tiêu thụ theo từng khung giờ, không thể tự điền nếu không có thiết bị đo (smart meter). Scope này không thuộc tool hiện tại.
 
 ---
 
@@ -92,29 +102,32 @@ Input: kWh thấp điểm / bình thường / cao điểm (3 ô)
 | Cấp điện áp | Thấp điểm | Bình thường | Cao điểm |
 |-------------|-----------|-------------|----------|
 | Từ 110kV trở lên | 1.146 đ | 1.811 đ | 3.266 đ |
-| 22kV – dưới 110kV | 1.037 đ | ⚠️ | 2.595 đ |
-| 6kV – dưới 22kV | 1.075 đ | ⚠️ | 3.055 đ |
-| Dưới 6kV | 1.133 đ | ⚠️ | 3.171 đ |
+| 22kV – dưới 110kV | 1.190 đ | 1.833 đ | 3.398 đ |
+| 6kV – dưới 22kV | 1.234 đ | 1.899 đ | 3.508 đ |
+| Dưới 6kV | 1.300 đ | 1.987 đ | 3.640 đ |
 
 - Giá sản xuất thấp hơn kinh doanh đáng kể (ưu đãi sản xuất)
 - Cấp điện áp cao hơn → giá thấp hơn (tiết kiệm chi phí truyền tải)
+- Use case tương tự kinh doanh: **kiểm tra hóa đơn EVN**, không phải dự trù
 
 ---
 
-### 4. Nông nghiệp — flat rate hoặc TOU đơn giản
+### 4. Nông nghiệp — TOU theo cấp điện áp
 
-⚠️ Cần verify bảng giá cụ thể từ QĐ 1279. Thông thường áp dụng giá ưu đãi thấp hơn sản xuất.
+⚠️ **Chưa có data** — chưa lấy được trang nông nghiệp từ QĐ 1279. UI hiển thị trạng thái "dữ liệu chưa cập nhật" khi user chọn nhóm này. Sẽ bổ sung khi có văn bản.
 
 ---
 
-### 5. Hành chính sự nghiệp — theo cấp điện áp, không TOU
+### 5. Hành chính sự nghiệp — flat rate, theo loại cơ sở × cấp điện áp
 
-| Cấp điện áp | Đơn giá (chưa VAT) |
-|-------------|-------------------|
-| Dưới 6kV | ~1.940 đ/kWh |
-| 6kV trở lên | ~2.226 đ/kWh |
+Không áp dụng TOU. Input: 1 ô kWh duy nhất.
 
-⚠️ Cần verify chính xác — hành chính SN (bệnh viện, trường học) thường không áp dụng TOU.
+| Loại cơ sở | Cấp điện áp | Đơn giá (chưa VAT) |
+|------------|-------------|-------------------|
+| BV / Trường học | Từ 6kV trở lên | 1.940 đ/kWh |
+| BV / Trường học | Dưới 6kV | 2.072 đ/kWh |
+| Hành chính sự nghiệp | Từ 6kV trở lên | 2.138 đ/kWh |
+| Hành chính sự nghiệp | Dưới 6kV | 2.226 đ/kWh |
 
 ---
 
@@ -211,12 +224,14 @@ tools.chilathu.com/tinh-tien-dien?kwh=250
 
 ---
 
-## Affiliate Placement
+## Footer CTA
 
-- **1 link duy nhất**, đặt sau output, trước soft CTA
-- Nếu kWh > 300 → affiliate **thiết bị tiết kiệm điện** (Accessstrade)
-- Nếu kWh ≤ 300 → affiliate **bảo hiểm nhà / thiết bị điện dân dụng**
-- Soft CTA cuối trang: *"Track chi tiêu điện hàng tháng với ChilàThu ↗"*
+Không dùng affiliate card. Footer 1 dòng inline text link:
+
+> Theo dõi thu chi với Chilathu.com ↗ (icon LinkSquare01Icon)
+
+- Style: nhỏ, muted, không đóng khung — chỉ là 1 dòng text link bình thường
+- Link: `https://chilathu.com` mở tab mới
 
 ---
 
@@ -334,5 +349,5 @@ Tổng cũ: 580.000đ   →   Tổng mới: 607.000đ   (+27.000đ)
 
 ## Open Questions
 
-1. **Bảng giá TOU còn thiếu**: Kinh doanh cấp 6kV+, sản xuất giờ bình thường, nông nghiệp — cần lấy từ văn bản QĐ 1279 đầy đủ trước khi build
-2. **UX TOU input**: 3 ô nhập kWh theo giờ — cần mockup để confirm trước khi code
+1. **Nông nghiệp pricing**: Chưa có data từ QĐ 1279 — cần ảnh/file trang nông nghiệp. UI tạm thời ẩn nhóm này hoặc show "dữ liệu chưa cập nhật".
+2. **Dự trù chi phí TOU**: Nếu muốn build tính năng ước tính hóa đơn trước (không cần hóa đơn sẵn), sẽ cần input khác — ví dụ "điều hòa bao nhiêu tiếng/ngày, chạy vào giờ nào". Đây là scope tool riêng, không phải tool này.
