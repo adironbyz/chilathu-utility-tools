@@ -14,7 +14,7 @@ export const rates = {
 
     // ─── Sinh hoạt: 6 bậc thang, thống nhất toàn quốc ───
     residential: [
-      { tier: 1, min: 0,   max: 50,       price: 1984 },
+      { tier: 1, min: 1,   max: 50,       price: 1984 },
       { tier: 2, min: 51,  max: 100,      price: 2050 },
       { tier: 3, min: 101, max: 200,      price: 2380 },
       { tier: 4, min: 201, max: 300,      price: 2998 },
