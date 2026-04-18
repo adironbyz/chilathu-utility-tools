@@ -8,6 +8,7 @@ import {
   formatVND,
 } from '../../data/electricityRates.js'
 import { Logo } from '../../components/Logo.jsx'
+import SEO from '../../components/SEO.jsx'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { DashboardSquare01Icon, Link01Icon, LinkSquare01Icon } from '@hugeicons/core-free-icons'
 import './TinhTienDien.css'
@@ -21,8 +22,8 @@ const GROUPS = [
   { id: 'administrative', label: 'Hành chính SN', tou: false },
 ]
 
-const TIER_COLORS = ['bar-t1','bar-t2','bar-t3','bar-t4','bar-t5','bar-t6']
-const TIER_BG     = ['#86efac','#4ade80','#fbbf24','#f97316','#ef4444','#dc2626']
+const TIER_BG        = ['#86efac','#4ade80','#fbbf24','#f97316','#ef4444','#dc2626']
+const TIER_BADGE_BG  = ['#16a34a','#15803d','#d97706','#ea580c','#dc2626','#b91c1c']
 
 // ─── Helpers ─────────────────────────────────────────────────
 function getVoltageOptions(groupId) {
@@ -55,32 +56,81 @@ function readShareParams() {
 
 // ─── Sub-components ──────────────────────────────────────────
 
-function BarChart({ result }) {
-  if (!result) return null
-  const isTOU = !!result.rows
-  const rows   = isTOU ? result.rows   : result.tiers
-  const colors = isTOU ? ['bar-off','bar-normal','bar-peak'] : TIER_COLORS
+// Bucket chart — chỉ dùng cho sinh hoạt (tiered)
+function BucketChart({ tiers }) {
+  if (!tiers) return null
+  return (
+    <div className="ttd-buckets-wrap">
+      <span className="ttd-buckets-title">Chi phí theo bậc thang</span>
+      <div className="ttd-pit-buckets">
+        {tiers.map((row, i) => {
+          const isEmpty   = row.kwh === 0
+          const fillPct   = isEmpty ? 0 : row.capacity ? Math.min(100, (row.kwh / row.capacity) * 100) : 100
+          const isFull    = !isEmpty && fillPct >= 99.9
+          const isPartial = !isEmpty && !isFull
+          const fillColor  = TIER_BG[i]       || TIER_BG[5]
+          const badgeColor = isEmpty ? 'var(--m-muted)' : (TIER_BADGE_BG[i] || TIER_BADGE_BG[5])
+          const rangeLabel = row.max === Infinity
+            ? `> ${row.min - 1} kWh`
+            : `${row.min}–${row.max} kWh`
 
-  const maxAmount = Math.max(...rows.map(r => r.amount), 1)
+          return (
+            <div key={i} className={`ttd-bucket${isEmpty ? ' ttd-bucket--next' : ''}`}>
+              <div className="ttd-bucket-header">
+                <div className="ttd-bucket-left">
+                  <span className="ttd-bucket-badge" style={{ background: badgeColor }}>
+                    Bậc {row.tier}
+                  </span>
+                  <span className="ttd-bucket-range">{rangeLabel}</span>
+                </div>
+                <span className="ttd-bucket-meta">
+                  {isEmpty
+                    ? <span className="ttd-bucket-next-label">chưa chạm</span>
+                    : formatVND(row.amount)
+                  }
+                </span>
+              </div>
+              <div className="ttd-bucket-track">
+                {fillPct > 0 && (
+                  <div className="ttd-bucket-fill" style={{ width: `${fillPct}%`, background: fillColor }} />
+                )}
+                {isPartial && <div className="ttd-bucket-cursor" style={{ left: `${fillPct}%` }} />}
+              </div>
+              {isPartial && row.capacity && (
+                <div className="ttd-bucket-hint">
+                  {row.kwh} / {row.capacity} kWh · còn {row.capacity - row.kwh} kWh nữa đầy bậc
+                </div>
+              )}
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
 
+// TOU summary — kinh doanh / sản xuất (flat rate theo khung giờ, không lũy tiến)
+function TouChart({ rows }) {
+  if (!rows) return null
+  const TOU_COLORS = { off: '#86efac', normal: '#4ade80', peak: '#ef4444' }
+  const keys = ['off', 'normal', 'peak']
   return (
     <div className="ttd-chart">
-      <span className="ttd-chart-title">Chi phí theo {isTOU ? 'khung giờ' : 'bậc'}</span>
+      <span className="ttd-chart-title">Chi phí theo khung giờ</span>
       {rows.map((row, i) => {
-        const label  = isTOU ? row.label.replace('Giờ ', '') : (typeof row.tier === 'number' ? `Bậc ${row.tier}` : 'Điện')
-        const amount = row.amount
-        const pct    = maxAmount > 0 ? (amount / maxAmount) * 100 : 0
+        const maxAmount = Math.max(...rows.map(r => r.amount), 1)
+        const pct = maxAmount > 0 ? (row.amount / maxAmount) * 100 : 0
         return (
           <div key={i} className="ttd-chart-row">
-            <span className="ttd-chart-label">{label}</span>
+            <span className="ttd-chart-label">{row.label.replace('Giờ ', '')}</span>
             <div className="ttd-chart-bar-wrap">
               <div
-                className={`ttd-chart-bar ${colors[i]}`}
-                style={{ width: `${pct}%` }}
+                className="ttd-chart-bar"
+                style={{ width: `${pct}%`, background: TOU_COLORS[keys[i]] }}
               />
             </div>
-            <span className={`ttd-chart-val${amount === 0 ? ' zero' : ''}`}>
-              {amount > 0 ? formatVND(amount) : '—'}
+            <span className={`ttd-chart-val${row.amount === 0 ? ' zero' : ''}`}>
+              {row.amount > 0 ? formatVND(row.amount) : '—'}
             </span>
           </div>
         )
@@ -279,6 +329,12 @@ export default function TinhTienDien() {
 
   return (
     <div className="ttd-page notebook-bg">
+      <SEO
+        title="Tính Tiền Điện EVN 2025 — Sinh hoạt, Kinh doanh, Sản xuất"
+        description="Tính tiền điện theo bậc thang EVN mới nhất 2025 (QĐ 1279). Hỗ trợ 5 nhóm: sinh hoạt, kinh doanh, sản xuất, nông nghiệp, hành chính sự nghiệp. Nhanh, chính xác, miễn phí."
+        path="/tinh-tien-dien"
+        keywords="tính tiền điện, tiền điện EVN, bậc thang tiền điện, công thức tính tiền điện, tiền điện sinh hoạt, tiền điện tháng"
+      />
       {/* Header */}
       <header className="ttd-header">
         <Logo />
@@ -435,8 +491,8 @@ export default function TinhTienDien() {
 
           {result && (
             <>
-              <BarChart result={result} groupId={group} />
-              <BreakdownTable result={result} compareResult={compareResult} showCompare={showCompare} />
+              {result.tiers && <BucketChart tiers={result.tiers} />}
+              {result.rows  && <TouChart rows={result.rows} />}
               <Summary result={result} compareResult={compareResult} showCompare={showCompare} />
               <SourceCitation rateData={rates.current} />
 

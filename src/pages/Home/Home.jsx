@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { ArrowRight01Icon, LinkSquare01Icon } from '@hugeicons/core-free-icons'
 import { Logo } from '../../components/Logo.jsx'
+import SEO from '../../components/SEO.jsx'
 import './Home.css'
 
 const UTM = '?utm_source=tools.chilathu.com&utm_medium=hub&utm_campaign=tools_home'
@@ -30,8 +31,8 @@ const TOOLS = [
     slug: 'tinh-luong',
     emoji: '💰',
     label: 'Tính lương Net',
-    desc: 'Gross → Net, khấu trừ BHXH & thuế TNCN',
-    available: false,
+    desc: 'Gross → Net, khấu trừ BHXH & thuế TNCN lũy tiến',
+    available: true,
     color: '#dcfce7',
     colorBorder: '#86efac',
   },
@@ -123,6 +124,12 @@ export default function Home() {
 
   return (
     <div className="home-page">
+      <SEO
+        title="Công cụ tài chính cá nhân miễn phí cho người Việt"
+        description="Tính tiền điện EVN, tiền nước 63 tỉnh thành, lương Net, lãi vay, chia bill... 12 công cụ tính nhanh miễn phí. Không cần đăng nhập, kết quả tức thì."
+        path="/"
+        keywords="tính tiền điện, tính tiền nước, tính lương net, công cụ tài chính cá nhân, tính lãi vay, chia tiền nhóm"
+      />
       <header className="home-header">
         <Logo size="lg" />
         <p className="home-tagline">Bộ công cụ tài chính cá nhân</p>

@@ -78,12 +78,11 @@ export function calcResidential(kwh, rateSet = rates.current) {
   const { residential, vat } = rateSet
   let remaining = kwh
   const tiers = residential.map(tier => {
-    const range = tier.max === Infinity
-      ? Math.max(0, remaining)
-      : Math.min(remaining, tier.max - tier.min + 1)
-    remaining = Math.max(0, remaining - range)
-    const amount = range * tier.price
-    return { ...tier, kwh: range, amount }
+    const capacity = tier.max === Infinity ? null : tier.max - tier.min + 1
+    const range    = capacity === null ? Math.max(0, remaining) : Math.min(remaining, capacity)
+    remaining      = Math.max(0, remaining - range)
+    const amount   = range * tier.price
+    return { ...tier, kwh: range, amount, capacity }
   })
   const subtotal = tiers.reduce((s, t) => s + t.amount, 0)
   const vatAmount = Math.round(subtotal * vat)

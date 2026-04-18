@@ -306,6 +306,118 @@
   text-underline-offset: 2px;
 }
 
+/* ─── Bucket chart (lũy tiến) ─── */
+.ttn-buckets-wrap {
+  padding: 12px 14px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ttn-buckets-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--m-muted);
+  margin-bottom: 6px;
+}
+
+.ttn-pit-buckets {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ttn-bucket {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.ttn-bucket--next { opacity: 0.45; }
+
+.ttn-bucket-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.ttn-bucket-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.ttn-bucket-badge {
+  font-size: 11px;
+  font-weight: 800;
+  color: #fff;
+  border-radius: 6px;
+  padding: 2px 7px;
+  flex-shrink: 0;
+}
+
+.ttn-bucket-range {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--m-ink-secondary);
+  white-space: nowrap;
+}
+
+.ttn-bucket-meta {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--m-ink);
+  letter-spacing: -0.2px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.ttn-bucket-next-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--m-muted);
+  font-style: italic;
+}
+
+.ttn-bucket-track {
+  position: relative;
+  height: 8px;
+  background: var(--m-subtle);
+  border-radius: 99px;
+  overflow: visible;
+}
+
+.ttn-bucket-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.35s var(--m-ease-out);
+}
+
+.ttn-bucket-cursor {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--m-card);
+  border: 2.5px solid var(--m-ink);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  pointer-events: none;
+}
+
+.ttn-bucket-hint {
+  font-size: 11px;
+  color: var(--m-ink-secondary);
+  letter-spacing: -0.1px;
+}
+
 /* ─── Bar chart ─── */
 .ttn-chart {
   padding: 12px 14px 10px;

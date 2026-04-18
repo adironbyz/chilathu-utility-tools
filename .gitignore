@@ -36,3 +36,4 @@ yarn-error.log*
 .cache/
 .parcel-cache/
 .vite/
+vite.config.js.timestamp-*.mjs

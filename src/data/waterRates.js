@@ -8,8 +8,13 @@
  *   residential.price    — đơn giá phẳng (nếu mode là flat)
  *   residential.vatIncluded — true nếu giá đã gồm VAT
  *   residential.vat      — tỉ lệ VAT (0.05, 0.10) nếu !vatIncluded
- *   residential.wasteWaterFeeRate — phí thoát nước (tỉ lệ % trên tiền nước)
+ *   residential.wasteWaterFeeRate — phí BVMT / thoát nước (tỉ lệ % trên tiền nước chưa VAT)
+ *   residential.wasteWaterFeeLabel — nhãn hiển thị cho khoản phí
  *   business             — tương tự, luôn là flat
+ *
+ * Phí BVMT nước (từ 1/1/2026):
+ *   NĐ 346/2025/NĐ-CP quy định phí bảo vệ môi trường đối với nước thải sinh hoạt
+ *   = 10% giá nước sạch chưa VAT, thu qua hóa đơn tiền nước, áp dụng toàn quốc.
  *
  * Để thêm tỉnh mới: copy template ở cuối, điền data, xóa pending: true
  */
@@ -35,6 +40,7 @@ export function calcWater(m3, province, type = 'residential', numPersons = 4) {
 
   const vatRate = info.vatIncluded ? 0 : (info.vat ?? 0)
   const wasteRate = info.wasteWaterFeeRate ?? 0
+  const wasteLabel = info.wasteWaterFeeLabel ?? `Phí thoát nước (${Math.round(wasteRate * 100)}%)`
 
   // ── Flat rate ──
   if (info.mode === 'flat') {
@@ -45,7 +51,7 @@ export function calcWater(m3, province, type = 'residential', numPersons = 4) {
       type, m3, flat: true,
       pricePerM3: info.price,
       vatIncluded: !!info.vatIncluded,
-      subtotal, vatAmount, wasteWaterFee, vatRate, wasteRate,
+      subtotal, vatAmount, wasteWaterFee, vatRate, wasteRate, wasteLabel,
       total: subtotal + vatAmount + wasteWaterFee,
     }
   }
@@ -63,8 +69,8 @@ export function calcWater(m3, province, type = 'residential', numPersons = 4) {
     if (remaining <= 0) break
     const tierMin = tierStart
     const tierMax = tier.max === Infinity ? Infinity : tier.max * scale
-    const capacity = tierMax === Infinity ? remaining : (tierMax - tierMin + 1)
-    const qty = Math.min(remaining, capacity)
+    const bucketCapacity = tierMax === Infinity ? null : (tierMax - tierMin + 1)
+    const qty = Math.min(remaining, bucketCapacity === null ? remaining : bucketCapacity)
     const amount = qty * tier.price
 
     breakdown.push({
@@ -73,6 +79,7 @@ export function calcWater(m3, province, type = 'residential', numPersons = 4) {
         ? `Trên ${tierMin - 1} m³`
         : `${tierMin}–${tierMax} m³`,
       qty,
+      capacity: bucketCapacity,
       price: tier.price,
       amount,
     })
@@ -92,7 +99,7 @@ export function calcWater(m3, province, type = 'residential', numPersons = 4) {
     breakdown, subtotal,
     vatIncluded: !!info.vatIncluded,
     vatAmount, vatRate,
-    wasteWaterFee, wasteRate,
+    wasteWaterFee, wasteRate, wasteLabel,
     total: subtotal + vatAmount + wasteWaterFee,
   }
 }
@@ -100,11 +107,16 @@ export function calcWater(m3, province, type = 'residential', numPersons = 4) {
 // ─── Province data ───────────────────────────────────────────────────────────
 //
 // Nguồn tham khảo chính:
-//   Hà Nội  — QĐ 3541/QĐ-UBND ngày 7/7/2023, hiệu lực từ 1/1/2024
-//   TP.HCM  — SAWACO, hiệu lực từ 2024 (phí thoát nước 30% từ 1/1/2025)
-//   Đà Nẵng — QĐ UBND TP Đà Nẵng, hiệu lực từ 1/1/2025
-//   Cần Thơ — UBND TP Cần Thơ, giá đã bao gồm VAT, hiệu lực từ 1/2/2024
+//   Hà Nội    — QĐ 3541/QĐ-UBND ngày 7/7/2023, giá nước hiệu lực từ 1/1/2024
+//               + NĐ 346/2025/NĐ-CP: phí BVMT 10% từ 1/1/2026
+//   TP.HCM    — SAWACO, hiệu lực từ 2024 (phí thoát nước 30% từ 1/1/2025)
+//               (TP.HCM áp dụng phí thoát nước riêng theo QĐ thành phố, không thay thế bởi NĐ 346)
+//   Đà Nẵng   — QĐ UBND TP Đà Nẵng, hiệu lực từ 1/1/2025
+//               + NĐ 346/2025/NĐ-CP: phí BVMT 10% từ 1/1/2026
+//   Cần Thơ   — UBND TP Cần Thơ, giá đã bao gồm VAT, hiệu lực từ 1/2/2024
+//               + NĐ 346/2025/NĐ-CP: phí BVMT 10% từ 1/1/2026 (tính ước tính trên giá VAT-included)
 //   Hải Phòng — QĐ 05/2024/QĐ-UBND, hiệu lực từ 1/3/2024 (đang cập nhật đủ bậc)
+//               + NĐ 346/2025/NĐ-CP: phí BVMT 10% từ 1/1/2026
 
 export const provinces = [
 
@@ -116,9 +128,9 @@ export const provinces = [
     id: 'ha-noi',
     name: 'Hà Nội',
     provider: 'HAWACO & các đơn vị cấp nước HN',
-    sourceLabel: 'QĐ 3541/QĐ-UBND (7/7/2023)',
+    sourceLabel: 'QĐ 3541/QĐ-UBND (7/7/2023) + NĐ 346/2025/NĐ-CP',
     sourceUrl: 'https://xaydungchinhsach.chinhphu.vn/ha-noi-chinh-thuc-tang-gia-nuoc-sach-119230710150335997.htm',
-    effectiveFrom: '01/01/2024',
+    effectiveFrom: '01/01/2026',
     residential: {
       mode: 'tiered_household',
       // Bậc tính theo hộ/tháng (không theo người)
@@ -130,6 +142,9 @@ export const provinces = [
       ],
       vatIncluded: false,
       vat: 0.05,
+      // NĐ 346/2025/NĐ-CP: phí BVMT = 10% giá nước sạch chưa VAT (từ 1/1/2026)
+      wasteWaterFeeRate: 0.10,
+      wasteWaterFeeLabel: 'Phí BVMT nước (10%)',
     },
     business: {
       mode: 'flat',
@@ -174,9 +189,9 @@ export const provinces = [
     id: 'da-nang',
     name: 'Đà Nẵng',
     provider: 'DAWACO',
-    sourceLabel: 'QĐ UBND TP Đà Nẵng 2025',
+    sourceLabel: 'QĐ UBND TP Đà Nẵng 2025 + NĐ 346/2025/NĐ-CP',
     sourceUrl: 'https://dawaco.com.vn/',
-    effectiveFrom: '01/01/2025',
+    effectiveFrom: '01/01/2026',
     residential: {
       mode: 'tiered_household',
       // Khu vực đô thị. Nông thôn: 3000 / 3600 / 4500
@@ -187,6 +202,9 @@ export const provinces = [
       ],
       vatIncluded: false,
       vat: 0.05,
+      // NĐ 346/2025/NĐ-CP: phí BVMT = 10% giá nước sạch chưa VAT (từ 1/1/2026)
+      wasteWaterFeeRate: 0.10,
+      wasteWaterFeeLabel: 'Phí BVMT nước (10%)',
     },
     business: {
       mode: 'flat',
@@ -202,9 +220,9 @@ export const provinces = [
     id: 'hai-phong',
     name: 'Hải Phòng',
     provider: 'Cấp nước Hải Phòng',
-    sourceLabel: 'QĐ 05/2024/QĐ-UBND (01/03/2024)',
+    sourceLabel: 'QĐ 05/2024/QĐ-UBND + NĐ 346/2025/NĐ-CP',
     sourceUrl: 'https://capnuochaiphong.com.vn/',
-    effectiveFrom: '01/03/2024',
+    effectiveFrom: '01/01/2026',
     residential: {
       mode: 'tiered_household',
       // Khu vực đô thị. Bậc 1 đã xác nhận; bậc 2+ đang cập nhật
@@ -217,6 +235,9 @@ export const provinces = [
       vat: 0.05,
       note: 'Bậc 2+ là ước tính — đang cập nhật dữ liệu chính thức',
       partialData: true,
+      // NĐ 346/2025/NĐ-CP: phí BVMT = 10% giá nước sạch chưa VAT (từ 1/1/2026)
+      wasteWaterFeeRate: 0.10,
+      wasteWaterFeeLabel: 'Phí BVMT nước (10%)',
     },
     business: {
       mode: 'flat',
@@ -231,15 +252,18 @@ export const provinces = [
     id: 'can-tho',
     name: 'Cần Thơ',
     provider: 'Cấp nước Cần Thơ',
-    sourceLabel: 'UBND TP Cần Thơ (01/02/2024)',
+    sourceLabel: 'UBND TP Cần Thơ (01/02/2024) + NĐ 346/2025/NĐ-CP',
     sourceUrl: 'https://tapchinuoc.vn/thanh-pho-can-tho-tang-gia-nuoc-sach-175240204102959461.htm',
-    effectiveFrom: '01/02/2024',
+    effectiveFrom: '01/01/2026',
     residential: {
       // Giá phẳng, đã bao gồm VAT
       mode: 'flat',
       price: 9020,
       vatIncluded: true,
       note: 'Giá đã bao gồm VAT. Khu vực đô thị',
+      // NĐ 346/2025/NĐ-CP: phí BVMT = 10% (áp trên giá VAT-included vì không tách được)
+      wasteWaterFeeRate: 0.10,
+      wasteWaterFeeLabel: 'Phí BVMT nước (~10%)',
     },
     business: {
       mode: 'flat',

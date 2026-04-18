@@ -2,13 +2,15 @@ import { useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { provinces, calcWater, formatVND } from '../../data/waterRates.js'
 import { Logo } from '../../components/Logo.jsx'
+import SEO from '../../components/SEO.jsx'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { DashboardSquare01Icon, Link01Icon, LinkSquare01Icon, UserIcon } from '@hugeicons/core-free-icons'
 import './TinhTienNuoc.css'
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-const TIER_COLORS = ['#86efac', '#4ade80', '#fbbf24', '#f97316']
+const TIER_FILL_COLORS  = ['#86efac', '#4ade80', '#fbbf24', '#f97316']
+const TIER_BADGE_COLORS = ['#16a34a', '#15803d', '#d97706', '#ea580c']
 
 function parseM3(v) {
   const n = parseFloat(v)
@@ -33,29 +35,52 @@ function readShareParams() {
 
 // ─── Sub-components ──────────────────────────────────────────────────────────
 
-function BarChart({ result }) {
+function BucketChart({ result }) {
   if (!result || result.flat) return null
-  const rows = result.breakdown.filter(r => r.qty > 0)
-  const maxAmount = Math.max(...rows.map(r => r.amount), 1)
-
+  const rows = result.breakdown
   return (
-    <div className="ttn-chart">
-      <span className="ttn-chart-title">Chi phí theo bậc</span>
-      {rows.map((row, i) => {
-        const pct = (row.amount / maxAmount) * 100
-        return (
-          <div key={i} className="ttn-chart-row">
-            <span className="ttn-chart-label">Bậc {row.tier}</span>
-            <div className="ttn-chart-bar-wrap">
-              <div
-                className="ttn-chart-bar"
-                style={{ width: `${pct}%`, background: TIER_COLORS[i] || TIER_COLORS[3] }}
-              />
+    <div className="ttn-buckets-wrap">
+      <span className="ttn-buckets-title">Chi phí theo bậc thang</span>
+      <div className="ttn-pit-buckets">
+        {rows.map((row, i) => {
+          const isEmpty   = row.qty === 0
+          const fillPct   = isEmpty ? 0 : row.capacity ? Math.min(100, (row.qty / row.capacity) * 100) : 100
+          const isFull    = !isEmpty && fillPct >= 99.9
+          const isPartial = !isEmpty && !isFull
+          const fillColor  = TIER_FILL_COLORS[i]  || TIER_FILL_COLORS[3]
+          const badgeColor = isEmpty ? 'var(--m-muted)' : (TIER_BADGE_COLORS[i] || TIER_BADGE_COLORS[3])
+
+          return (
+            <div key={i} className={`ttn-bucket${isEmpty ? ' ttn-bucket--next' : ''}`}>
+              <div className="ttn-bucket-header">
+                <div className="ttn-bucket-left">
+                  <span className="ttn-bucket-badge" style={{ background: badgeColor }}>
+                    Bậc {row.tier}
+                  </span>
+                  <span className="ttn-bucket-range">{row.label}</span>
+                </div>
+                <span className="ttn-bucket-meta">
+                  {isEmpty
+                    ? <span className="ttn-bucket-next-label">chưa chạm</span>
+                    : formatVND(row.amount)
+                  }
+                </span>
+              </div>
+              <div className="ttn-bucket-track">
+                {fillPct > 0 && (
+                  <div className="ttn-bucket-fill" style={{ width: `${fillPct}%`, background: fillColor }} />
+                )}
+                {isPartial && <div className="ttn-bucket-cursor" style={{ left: `${fillPct}%` }} />}
+              </div>
+              {isPartial && row.capacity && (
+                <div className="ttn-bucket-hint">
+                  {row.qty} / {row.capacity} m³ · còn {row.capacity - row.qty} m³ nữa đầy bậc
+                </div>
+              )}
             </div>
-            <span className="ttn-chart-val">{formatVND(row.amount)}</span>
-          </div>
-        )
-      })}
+          )
+        })}
+      </div>
     </div>
   )
 }
@@ -127,7 +152,7 @@ function Summary({ result }) {
 
       {result.wasteWaterFee > 0 && (
         <div className="ttn-summary-row">
-          <span className="ttn-summary-label">Phí thoát nước ({Math.round(result.wasteRate * 100)}%)</span>
+          <span className="ttn-summary-label">{result.wasteLabel}</span>
           <span className="ttn-summary-value">{formatVND(result.wasteWaterFee)}</span>
         </div>
       )}
@@ -209,6 +234,12 @@ export default function TinhTienNuoc() {
 
   return (
     <div className="ttn-page notebook-bg">
+      <SEO
+        title="Tính Tiền Nước 2026 — 63 Tỉnh Thành Việt Nam"
+        description="Tính tiền nước sinh hoạt và kinh doanh theo giá nước mới nhất 2026 của 63 tỉnh thành. Đã tính phí BVMT nước theo NĐ 346/2025. Hà Nội, TP.HCM, Đà Nẵng, Hải Phòng, Cần Thơ..."
+        path="/tinh-tien-nuoc"
+        keywords="tính tiền nước, giá nước sinh hoạt, tiền nước Hà Nội, tiền nước HCM, tiền nước 63 tỉnh thành, bậc thang nước"
+      />
 
       {/* ── Header ── */}
       <header className="ttn-header">
@@ -358,8 +389,7 @@ export default function TinhTienNuoc() {
           {/* Result */}
           {result && (
             <>
-              <BarChart result={result} />
-              <BreakdownTable result={result} />
+              <BucketChart result={result} />
               <Summary result={result} />
               <SourceCitation province={province} />
 
@@ -385,7 +415,7 @@ export default function TinhTienNuoc() {
         </a>
 
         <div className="ttn-footer">
-          © ChilàThu · Dữ liệu từ quyết định UBND các tỉnh/thành phố
+          © ChilàThu · Giá nước + phí BVMT 10% theo NĐ 346/2025/NĐ-CP (từ 1/1/2026)
         </div>
       </div>
 
