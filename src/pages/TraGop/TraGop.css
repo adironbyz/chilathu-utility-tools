@@ -1,0 +1,431 @@
+/* ─── Shell ─── */
+.tg-page {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 0 80px;
+}
+
+/* ─── Header ─── */
+.tg-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  height: 52px;
+  background: var(--m-surface);
+  border-bottom: 1px solid var(--m-border);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+.tg-menu-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--m-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--m-ink-secondary);
+  background: transparent;
+  transition: background var(--m-dur-micro);
+  flex-shrink: 0;
+}
+.tg-menu-btn:active { background: var(--m-subtle); }
+
+/* ─── Content ─── */
+.tg-content {
+  width: 100%;
+  max-width: 560px;
+  padding: 16px 14px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tg-page-title {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--m-ink);
+  letter-spacing: -0.5px;
+  line-height: 1.15;
+  padding: 4px 2px 0;
+}
+
+/* ─── Card ─── */
+.tg-card {
+  background: var(--m-card);
+  border-radius: var(--m-radius-item);
+  border: 1px solid var(--m-border);
+  overflow: hidden;
+}
+
+.tg-card-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--m-muted);
+  padding: 14px 14px 0;
+}
+
+/* ─── Inputs ─── */
+.tg-inputs {
+  padding: 10px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tg-input-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tg-input-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--m-ink-secondary);
+}
+
+.tg-input-field {
+  display: flex;
+  align-items: center;
+  background: var(--m-card);
+  border: 1.5px solid var(--m-border);
+  border-radius: var(--m-radius-input);
+  padding: 10px 14px;
+  gap: 8px;
+  transition: border-color var(--m-dur-micro);
+}
+.tg-input-field:focus-within {
+  border-color: var(--m-green);
+  box-shadow: 0 0 0 3px var(--m-green-bg);
+}
+
+.tg-input-field input {
+  flex: 1;
+  border: none;
+  background: none;
+  font-size: 17px;
+  font-weight: 400;
+  color: var(--m-ink);
+  outline: none;
+  width: 100%;
+  letter-spacing: -0.2px;
+  font-family: inherit;
+}
+.tg-input-field input::placeholder { color: var(--m-muted); font-size: 16px; }
+
+.tg-input-unit {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--m-muted);
+  flex-shrink: 0;
+}
+
+/* ─── Mode grid (3 cols) ─── */
+.tg-mode-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+}
+
+.tg-mode-btn {
+  height: 40px;
+  border-radius: var(--m-radius-md);
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--m-subtle);
+  color: var(--m-ink-secondary);
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  transition: all var(--m-dur-micro);
+  white-space: nowrap;
+  padding: 0 4px;
+}
+.tg-mode-btn.active {
+  background: var(--m-green-bg);
+  border-color: var(--m-green-border);
+  color: var(--m-green-dark);
+}
+.tg-mode-btn:active { opacity: 0.7; }
+
+.tg-mode-hint {
+  font-size: 12px;
+  color: var(--m-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ─── Chips ─── */
+.tg-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.tg-chip {
+  height: 30px;
+  padding: 0 12px;
+  border-radius: var(--m-radius-pill);
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--m-subtle);
+  color: var(--m-ink-secondary);
+  border: 1px solid var(--m-border);
+  cursor: pointer;
+  transition: all var(--m-dur-micro);
+}
+.tg-chip.active {
+  background: var(--m-green-bg);
+  border-color: var(--m-green-border);
+  color: var(--m-green-dark);
+}
+.tg-chip:active { opacity: 0.7; }
+
+/* ─── Result card ─── */
+.tg-result { display: flex; flex-direction: column; }
+
+.tg-empty {
+  padding: 28px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--m-muted);
+}
+.tg-empty-arrow {
+  font-size: 22px;
+  animation: tg-bounce 1.4s ease-in-out infinite;
+}
+@keyframes tg-bounce {
+  0%, 100% { transform: translateY(0);    opacity: 0.5; }
+  50%       { transform: translateY(-5px); opacity: 1;   }
+}
+
+/* ─── Summary ─── */
+.tg-summary {
+  border-bottom: 1px solid var(--m-divider);
+}
+
+.tg-sum-hero {
+  padding: 16px 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--m-green-bg);
+  border-bottom: 1px solid var(--m-green-border);
+}
+
+.tg-sum-hero-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--m-green-dark);
+}
+
+.tg-sum-hero-val {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--m-green-dark);
+  letter-spacing: -0.8px;
+  line-height: 1.1;
+}
+
+.tg-free-badge {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--m-green-dark);
+  opacity: 0.75;
+}
+
+.tg-sum-rows {
+  padding: 10px 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tg-sum-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.tg-sum-row--highlight {
+  margin-top: 4px;
+  padding-top: 8px;
+  border-top: 1px solid var(--m-divider);
+}
+
+.tg-sum-label {
+  font-size: 13px;
+  color: var(--m-ink-secondary);
+}
+
+.tg-sum-val {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--m-ink);
+  letter-spacing: -0.2px;
+}
+.tg-sum-val.tg-red { color: var(--m-red); }
+
+/* ─── Section label ─── */
+.tg-sec-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--m-muted);
+  padding: 12px 14px 4px;
+}
+
+/* ─── Table ─── */
+.tg-table { padding-bottom: 0; }
+
+.tg-thead,
+.tg-trow {
+  display: grid;
+  grid-template-columns: 38px 1fr 1fr 1fr;
+  gap: 0 4px;
+  padding: 8px 14px;
+  align-items: baseline;
+}
+
+.tg-thead {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--m-muted);
+  border-bottom: 1px solid var(--m-divider);
+}
+
+.tg-thead span:not(:first-child),
+.tg-trow  span:not(:first-child) {
+  text-align: right;
+}
+
+.tg-trow {
+  font-size: 13px;
+  border-bottom: 1px solid var(--m-divider);
+}
+.tg-trow:last-child { border-bottom: none; }
+.tg-trow:nth-child(even) { background: var(--m-surface); }
+
+.tg-tm {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--m-muted);
+}
+.tg-tp {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--m-ink-secondary);
+  letter-spacing: -0.2px;
+}
+.tg-ti {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--m-red);
+  letter-spacing: -0.2px;
+}
+.tg-tb {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--m-ink);
+  letter-spacing: -0.2px;
+}
+.tg-tb.zero {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--m-green-dark);
+}
+
+/* ─── Actions ─── */
+.tg-actions {
+  padding: 12px 14px 14px;
+  border-top: 1px solid var(--m-divider);
+}
+
+.tg-btn-share {
+  width: 100%;
+  height: 46px;
+  border-radius: var(--m-radius-pill);
+  font-size: 15px;
+  font-weight: 700;
+  background: var(--m-green);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background var(--m-dur-micro);
+}
+.tg-btn-share:active { background: var(--m-green-dark); }
+
+
+/* ─── Toast ─── */
+.tg-toast {
+  position: fixed;
+  top: 64px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  background: var(--m-ink);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: var(--m-radius-pill);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--m-dur-fast), transform var(--m-dur-fast) var(--m-ease-out);
+  white-space: nowrap;
+  z-index: 100;
+}
+.tg-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ─── Disclaimer ─── */
+.tg-disclaimer {
+  background: var(--m-subtle);
+  border-radius: var(--m-radius-md);
+  padding: 12px 14px;
+  font-size: 12px;
+  color: var(--m-muted);
+  line-height: 1.6;
+}
+.tg-disclaimer strong { color: var(--m-ink-secondary); }
+
+/* ─── CTA ─── */
+.tg-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--m-ink-secondary);
+  text-decoration: none;
+  padding: 4px 0;
+  transition: color var(--m-dur-micro);
+}
+.tg-cta:active { color: var(--m-green-dark); }
+
+/* ─── Footer ─── */
+.tg-footer {
+  padding: 16px 14px 0;
+  text-align: center;
+  font-size: 11px;
+  color: var(--m-muted);
+}

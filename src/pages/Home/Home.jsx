@@ -37,20 +37,29 @@ const TOOLS = [
     colorBorder: '#86efac',
   },
   {
+    slug: 'lai-the-tin-dung',
+    emoji: '💳',
+    label: 'Tính lãi thẻ tín dụng quá hạn',
+    desc: 'Tính lãi khi không trả đủ — tối thiểu, tự nhập, hoặc không trả',
+    available: true,
+    color: '#fef2f2',
+    colorBorder: '#fca5a5',
+  },
+  {
     slug: 'tinh-lai-vay',
     emoji: '🏦',
-    label: 'Tính lãi vay',
-    desc: 'Lãi đơn, lãi kép, dư nợ giảm dần',
-    available: false,
+    label: 'Tính lãi vay ngân hàng, Cty tài chính',
+    desc: 'Vay nhanh, mua nhà, mua xe, vay tiêu dùng',
+    available: true,
     color: '#ede9fe',
     colorBorder: '#c4b5fd',
   },
   {
     slug: 'tra-gop',
     emoji: '📅',
-    label: 'Trả góp',
-    desc: 'Trả góp 0%, ngân hàng, tài chính tiêu dùng',
-    available: false,
+    label: 'Tính trả góp',
+    desc: '0% không phí, 0% có phí chuyển đổi, có lãi suất',
+    available: true,
     color: '#fce7f3',
     colorBorder: '#f9a8d4',
   },
@@ -58,64 +67,19 @@ const TOOLS = [
     slug: 'chia-tien',
     emoji: '👥',
     label: 'Chia tiền nhóm',
-    desc: 'Chia đều chi phí, ai trả ai nhận',
-    available: false,
+    desc: 'Chia đều hoặc theo món — tính ai chuyển cho ai',
+    available: true,
     color: '#ffedd5',
     colorBorder: '#fdba74',
-  },
-  {
-    slug: 'chia-bill',
-    emoji: '🍜',
-    label: 'Chia bill',
-    desc: 'Hóa đơn ăn uống, mỗi người ăn gì trả nấy',
-    available: false,
-    color: '#fef2f2',
-    colorBorder: '#fca5a5',
-  },
-  {
-    slug: 'lai-the-tin-dung',
-    emoji: '💳',
-    label: 'Lãi thẻ tín dụng',
-    desc: 'Lãi phát sinh khi không trả đủ tối thiểu',
-    available: false,
-    color: '#f0fdf4',
-    colorBorder: '#86efac',
-  },
-  {
-    slug: 'mua-duoc-khong',
-    emoji: '🏠',
-    label: 'Mua được không?',
-    desc: 'Thu nhập có đủ vay mua nhà, xe không',
-    available: false,
-    color: '#ecfdf5',
-    colorBorder: '#6ee7b7',
-  },
-  {
-    slug: 'tiet-kiem',
-    emoji: '🎯',
-    label: 'Mục tiêu tiết kiệm',
-    desc: 'Bao lâu đạt đủ số tiền muốn để dành',
-    available: false,
-    color: '#f0f9ff',
-    colorBorder: '#7dd3fc',
   },
   {
     slug: 'chi-phi-du-lich',
     emoji: '✈️',
     label: 'Chi phí du lịch',
-    desc: 'Lên ngân sách chuyến đi, đổi ngoại tệ',
-    available: false,
+    desc: 'Ngân sách theo hạng mục, đổi ngoại tệ, chia theo đầu người',
+    available: true,
     color: '#fff7ed',
     colorBorder: '#fdba74',
-  },
-  {
-    slug: 'quy-khan-cap',
-    emoji: '🛡️',
-    label: 'Quỹ khẩn cấp',
-    desc: 'Cần để dành bao nhiêu cho 3–6 tháng',
-    available: false,
-    color: '#f5f3ff',
-    colorBorder: '#c4b5fd',
   },
 ]
 
@@ -126,7 +90,7 @@ export default function Home() {
     <div className="home-page">
       <SEO
         title="Tính tiền điện, nước, lương Net, lãi vay — miễn phí cho người Việt"
-        description="Tính tiền điện EVN, tiền nước 63 tỉnh thành, lương Net, lãi vay, chia bill... 12 công cụ tính nhanh miễn phí. Không cần đăng nhập, kết quả tức thì."
+        description="Tính tiền điện, tiền nước, lương Net, lãi vay, trả góp, chia tiền nhóm, chi phí du lịch. 8 công cụ tài chính miễn phí. Không cần đăng nhập, kết quả tức thì."
         path="/"
         keywords="tính tiền điện, tính tiền nước, tính lương net, công cụ tài chính cá nhân, tính lãi vay, chia tiền nhóm"
       />

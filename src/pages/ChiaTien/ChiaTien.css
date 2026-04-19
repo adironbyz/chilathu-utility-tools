@@ -1,0 +1,710 @@
+/* ─── Shell ─── */
+.ct-page {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 0 80px;
+}
+
+/* ─── Header ─── */
+.ct-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  height: 52px;
+  background: var(--m-surface);
+  border-bottom: 1px solid var(--m-border);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+.ct-menu-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--m-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--m-ink-secondary);
+  background: transparent;
+  transition: background var(--m-dur-micro);
+  flex-shrink: 0;
+}
+.ct-menu-btn:active { background: var(--m-subtle); }
+
+/* ─── Content ─── */
+.ct-content {
+  width: 100%;
+  max-width: 560px;
+  padding: 16px 14px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ct-page-title {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--m-ink);
+  letter-spacing: -0.5px;
+  line-height: 1.15;
+  padding: 4px 2px 0;
+}
+
+/* ─── Mode tabs ─── */
+.ct-mode-tabs {
+  display: flex;
+  background: var(--m-subtle);
+  border-radius: var(--m-radius-md);
+  padding: 3px;
+  gap: 3px;
+}
+
+.ct-tab {
+  flex: 1;
+  height: 36px;
+  border-radius: calc(var(--m-radius-md) - 2px);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--m-ink-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all var(--m-dur-micro);
+}
+.ct-tab.active {
+  background: var(--m-card);
+  color: var(--m-green-dark);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+/* ─── Card ─── */
+.ct-card {
+  background: var(--m-card);
+  border-radius: var(--m-radius-item);
+  border: 1px solid var(--m-border);
+  overflow: hidden;
+}
+
+.ct-card-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 14px 0;
+}
+
+.ct-card-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--m-muted);
+}
+
+/* Stand-alone title (not in a row) keeps original padding */
+.ct-card > .ct-card-title {
+  padding: 14px 14px 0;
+}
+
+.ct-clear-btn {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--m-red);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 0;
+  opacity: 0.75;
+  transition: opacity var(--m-dur-micro), font-weight var(--m-dur-micro);
+}
+.ct-clear-btn:active { opacity: 1; }
+.ct-clear-btn.confirm {
+  opacity: 1;
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ─── Inputs ─── */
+.ct-inputs {
+  padding: 10px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ct-input-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ct-input-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--m-ink-secondary);
+}
+
+.ct-input-field {
+  display: flex;
+  align-items: center;
+  background: var(--m-card);
+  border: 1.5px solid var(--m-border);
+  border-radius: var(--m-radius-input);
+  padding: 10px 14px;
+  gap: 8px;
+  transition: border-color var(--m-dur-micro);
+}
+.ct-input-field:focus-within {
+  border-color: var(--m-green);
+  box-shadow: 0 0 0 3px var(--m-green-bg);
+}
+
+.ct-input-field input {
+  flex: 1;
+  border: none;
+  background: none;
+  font-size: 17px;
+  font-weight: 400;
+  color: var(--m-ink);
+  outline: none;
+  width: 100%;
+  letter-spacing: -0.2px;
+  font-family: inherit;
+}
+.ct-input-field input::placeholder { color: var(--m-muted); font-size: 16px; }
+
+.ct-input-unit {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--m-muted);
+  flex-shrink: 0;
+}
+
+/* ─── Chips ─── */
+.ct-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.ct-chip {
+  height: 30px;
+  padding: 0 12px;
+  border-radius: var(--m-radius-pill);
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--m-subtle);
+  color: var(--m-ink-secondary);
+  border: 1px solid var(--m-border);
+  cursor: pointer;
+  transition: all var(--m-dur-micro);
+}
+.ct-chip.active {
+  background: var(--m-green-bg);
+  border-color: var(--m-green-border);
+  color: var(--m-green-dark);
+}
+.ct-chip:active { opacity: 0.7; }
+
+/* ─── Stepper (số người) ─── */
+.ct-stepper-row {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border: 1.5px solid var(--m-border);
+  border-radius: var(--m-radius-input);
+  overflow: hidden;
+  align-self: flex-start;
+}
+
+.ct-stepper-btn {
+  width: 44px;
+  height: 44px;
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--m-ink-secondary);
+  background: var(--m-subtle);
+  border: none;
+  cursor: pointer;
+  transition: background var(--m-dur-micro);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ct-stepper-btn:active { background: var(--m-border); }
+.ct-stepper-btn:disabled { opacity: 0.3; cursor: default; }
+
+.ct-stepper-val {
+  width: 52px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--m-ink);
+  border-left: 1.5px solid var(--m-border);
+  border-right: 1.5px solid var(--m-border);
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ct-stepper-row + .ct-chips { margin-top: 6px; }
+
+/* ─── Members ─── */
+.ct-member-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ct-member-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 6px 0 12px;
+  border-radius: var(--m-radius-pill);
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--m-green-bg);
+  color: var(--m-green-dark);
+  border: 1px solid var(--m-green-border);
+}
+
+.ct-member-remove {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 14px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--m-green-border);
+  color: var(--m-green-dark);
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background var(--m-dur-micro);
+}
+.ct-member-remove:active { background: var(--m-green); color: #fff; }
+
+.ct-add-member-row {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.ct-member-input-field {
+  flex: 1;
+}
+
+.ct-add-btn {
+  height: 44px;
+  padding: 0 16px;
+  border-radius: var(--m-radius-input);
+  font-size: 14px;
+  font-weight: 700;
+  background: var(--m-green);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background var(--m-dur-micro);
+}
+.ct-add-btn:active { background: var(--m-green-dark); }
+.ct-add-btn:disabled {
+  background: var(--m-subtle);
+  color: var(--m-ink-secondary);
+  cursor: default;
+}
+
+.ct-hint {
+  font-size: 13px;
+  color: var(--m-muted);
+  margin: 0;
+  padding: 4px 0;
+}
+
+/* ─── Expense list ─── */
+.ct-expense-list {
+  border-top: 1px solid var(--m-divider);
+}
+
+.ct-expense-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--m-divider);
+}
+.ct-expense-item:last-child { border-bottom: none; }
+
+.ct-expense-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.ct-expense-desc {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--m-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ct-expense-meta {
+  font-size: 11px;
+  color: var(--m-muted);
+}
+
+.ct-expense-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.ct-expense-amount {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--m-ink);
+  letter-spacing: -0.2px;
+}
+
+.ct-expense-remove {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--m-subtle);
+  color: var(--m-muted);
+  border: none;
+  cursor: pointer;
+  transition: background var(--m-dur-micro);
+}
+.ct-expense-remove:active { background: var(--m-border); }
+
+/* ─── Add expense form ─── */
+.ct-add-form {
+  padding: 12px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-top: 1px solid var(--m-divider);
+  background: var(--m-card);
+}
+
+/* Person chips (payer / participants) */
+.ct-person-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.ct-person-chip {
+  height: 32px;
+  padding: 0 14px;
+  border-radius: var(--m-radius-pill);
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--m-subtle);
+  color: var(--m-ink-secondary);
+  border: 1.5px solid var(--m-border);
+  cursor: pointer;
+  transition: all var(--m-dur-micro);
+}
+.ct-person-chip.payer.active {
+  background: var(--m-green-bg);
+  border-color: var(--m-green-border);
+  color: var(--m-green-dark);
+}
+.ct-person-chip.part.active {
+  background: var(--m-green-bg);
+  border-color: var(--m-green-border);
+  color: var(--m-green-dark);
+}
+.ct-person-chip:active { opacity: 0.7; }
+
+.ct-form-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.ct-btn-cancel {
+  flex: 1;
+  height: 44px;
+  border-radius: var(--m-radius-pill);
+  font-size: 14px;
+  font-weight: 700;
+  background: var(--m-subtle);
+  color: var(--m-ink-secondary);
+  border: 1.5px solid var(--m-border);
+  cursor: pointer;
+  transition: background var(--m-dur-micro);
+}
+.ct-btn-cancel:active { background: var(--m-border); }
+
+.ct-btn-add-expense {
+  flex: 2;
+  height: 44px;
+  border-radius: var(--m-radius-pill);
+  font-size: 14px;
+  font-weight: 700;
+  background: var(--m-green);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background var(--m-dur-micro);
+}
+.ct-btn-add-expense:active { background: var(--m-green-dark); }
+.ct-btn-add-expense:disabled {
+  background: var(--m-subtle);
+  color: var(--m-ink-secondary);
+  cursor: default;
+}
+
+.ct-add-expense-btn {
+  width: 100%;
+  padding: 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--m-green-dark);
+  background: transparent;
+  border-top: 1px solid var(--m-divider);
+  text-align: center;
+  cursor: pointer;
+  transition: background var(--m-dur-micro);
+}
+.ct-add-expense-btn:active { background: var(--m-subtle); }
+
+/* ─── Result card ─── */
+.ct-result { display: flex; flex-direction: column; }
+
+.ct-sum-hero {
+  padding: 16px 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: var(--m-green-bg);
+  border-bottom: 1px solid var(--m-green-border);
+}
+
+.ct-sum-hero-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--m-green-dark);
+}
+
+.ct-sum-hero-val {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--m-green-dark);
+  letter-spacing: -0.8px;
+  line-height: 1.1;
+}
+
+.ct-sum-rows {
+  padding: 10px 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ct-sum-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.ct-sum-label { font-size: 13px; color: var(--m-ink-secondary); }
+.ct-sum-val { font-size: 14px; font-weight: 700; color: var(--m-ink); letter-spacing: -0.2px; }
+
+/* ─── Settlement ─── */
+.ct-settled {
+  padding: 16px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--m-green-dark);
+  text-align: center;
+}
+
+.ct-sec-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--m-muted);
+  padding: 10px 14px 4px;
+}
+
+.ct-transactions {
+  padding: 4px 0 8px;
+  border-bottom: 1px solid var(--m-divider);
+}
+
+.ct-transaction {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--m-divider);
+}
+.ct-transaction:last-child { border-bottom: none; }
+
+.ct-txn-from {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--m-red);
+  flex-shrink: 0;
+}
+
+.ct-txn-arrow {
+  font-size: 13px;
+  color: var(--m-muted);
+  flex-shrink: 0;
+}
+
+.ct-txn-to {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--m-green-dark);
+  flex: 1;
+}
+
+.ct-txn-amount {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--m-ink);
+  letter-spacing: -0.3px;
+  flex-shrink: 0;
+}
+
+/* ─── Balance list ─── */
+.ct-balance-list {
+  padding: 4px 0 8px;
+  border-bottom: 1px solid var(--m-divider);
+}
+
+.ct-balance-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 14px;
+  border-bottom: 1px solid var(--m-divider);
+}
+.ct-balance-row:last-child { border-bottom: none; }
+
+.ct-balance-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--m-ink);
+}
+
+.ct-balance-val {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--m-muted);
+}
+.ct-balance-val.pos { color: var(--m-green-dark); }
+.ct-balance-val.neg { color: var(--m-red); }
+
+/* ─── Actions ─── */
+.ct-actions {
+  padding: 12px 14px 14px;
+}
+
+.ct-btn-share {
+  width: 100%;
+  height: 46px;
+  border-radius: var(--m-radius-pill);
+  font-size: 15px;
+  font-weight: 700;
+  background: var(--m-green);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background var(--m-dur-micro);
+}
+.ct-btn-share:active { background: var(--m-green-dark); }
+
+/* ─── Toast ─── */
+.ct-toast {
+  position: fixed;
+  top: 64px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  background: var(--m-ink);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: var(--m-radius-pill);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--m-dur-fast), transform var(--m-dur-fast) var(--m-ease-out);
+  white-space: nowrap;
+  z-index: 100;
+}
+.ct-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+.ct-toast--action {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 12px 10px 20px;
+}
+.ct-toast-undo {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--m-green-border);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  transition: background var(--m-dur-micro);
+}
+.ct-toast-undo:active { background: rgba(255,255,255,0.1); }
+
+/* ─── CTA / Footer ─── */
+.ct-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--m-ink-secondary);
+  text-decoration: none;
+  padding: 4px 0;
+}
+.ct-cta:active { color: var(--m-green-dark); }
+
+.ct-footer {
+  padding: 16px 14px 0;
+  text-align: center;
+  font-size: 11px;
+  color: var(--m-muted);
+}

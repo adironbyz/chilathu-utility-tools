@@ -1,6 +1,6 @@
 # ChilàThu Tools — Roadmap
 > Domain: `tools.chilathu.com` · Tech: React + Vite · Deploy: Cloudflare Pages
-> Cập nhật: 2026-04-18
+> Cập nhật: 2026-04-19
 
 ---
 
@@ -24,9 +24,9 @@
 | Tool | Slug | Status | Ghi chú |
 |------|------|--------|---------|
 | Tính tiền điện EVN | `/tinh-tien-dien` | ✅ Live | Sinh hoạt + TOU (kinh doanh/sản xuất/hành chính). Nông nghiệp pending data. Bug bậc 1 (min:0→1) đã fix. |
-| Tính lương NET/GROSS | `/tinh-luong` | ⬜ Chưa build | — |
-| Tính lãi vay | `/tinh-lai-vay` | ⬜ Chưa build | — |
-| Chia tiền nhóm | `/chia-tien` | ⬜ Chưa build | — |
+| Tính lương NET/GROSS | `/tinh-luong` | ✅ Live | Gross → Net, BHXH & thuế TNCN lũy tiến |
+| Tính lãi vay | `/tinh-lai-vay` | ✅ Live | 4 mode theo intent: Vay nhanh (lãi đơn, %/tháng) / Mua nhà (dư nợ giảm dần + lãi hỗn hợp cố định→thả nổi) / Mua xe / Vay tiêu dùng. Bảng lịch trả nợ, expand nếu >24 tháng. |
+| Chia tiền nhóm | `/chia-tien` | ✅ Live | 2 mode: Chia đều (total ÷ N) / Theo món (thêm thành viên, ghi chi tiêu, ai trả, ai dùng → tính settlement tối giản). Copy kết quả as text. |
 
 ---
 
@@ -34,21 +34,10 @@
 
 | Tool | Slug | Status | Ghi chú |
 |------|------|--------|---------|
-| Tính trả góp | `/tra-gop` | ⬜ Chưa build | — |
-| Tính tiền nước | `/tinh-tien-nuoc` | ⬜ Chưa build | — |
-| Tính tiết kiệm | `/tiet-kiem` | ⬜ Chưa build | — |
-| Chia bill | `/chia-bill` | ⬜ Chưa build | — |
-
----
-
-## Sprint 3 — Nâng cao
-
-| Tool | Slug | Status | Ghi chú |
-|------|------|--------|---------|
-| Lãi thẻ tín dụng | `/lai-the-tin-dung` | ⬜ Chưa build | — |
-| Mua được không? | `/mua-duoc-khong` | ⬜ Chưa build | — |
-| Chi phí du lịch | `/chi-phi-du-lich` | ⬜ Chưa build | — |
-| Quỹ khẩn cấp | `/quy-khan-cap` | ⬜ Chưa build | — |
+| Tính tiền nước | `/tinh-tien-nuoc` | ✅ Live | Bậc thang sinh hoạt, đủ 63 tỉnh thành |
+| Tính trả góp | `/tra-gop` | ✅ Live | 3 mode: 0% không phí / 0% có phí chuyển đổi (hiện lãi suất thực tế) / Có lãi suất dư nợ giảm dần. Bảng lịch thanh toán. |
+| Lãi thẻ tín dụng | `/lai-the-tin-dung` | ✅ Live | Dư nợ + lãi/tháng. 3 mode: không trả / tối thiểu 5% / tự nhập. Bảng tháng chi tiết. |
+| Chi phí du lịch | `/chi-phi-du-lich` | ✅ Live | Thêm chi phí theo 7 hạng mục (vé, lưu trú, ăn, đi lại, vui chơi, mua sắm, khác). Đổi ngoại tệ (USD/THB/JPY/KRW/EUR/SGD) với tỷ giá tuỳ chỉnh. Tổng kết: per person + biểu đồ % theo category. Copy tổng kết. |
 
 ---
 
@@ -58,7 +47,7 @@
 |----------|--------|---------|
 | Domain `tools.chilathu.com` | ✅ Live | Cloudflare Pages |
 | OG meta tags | ✅ Done | og:image.png trong `public/`, static cho tất cả routes |
-| Home page `/` | ✅ Done | Grid 12 tools + bills-app flagship card (UTM) |
+| Home page `/` | ✅ Done | Grid 8 tools + bills-app flagship card (UTM) |
 | Dynamic OG per tool | ⬜ Backlog | Cần Cloudflare Pages Functions — scope sau |
 | Nông nghiệp pricing | ⬜ Pending | Chờ ảnh QĐ 1279 trang nông nghiệp |
 | GA4 tracking | ⬜ Chưa setup | Cần thêm gtag vào index.html |
@@ -67,9 +56,8 @@
 
 ## Pending decisions
 
-- **Tính lương**: NET→GROSS hay GROSS→NET hay cả 2? Có tính bảo hiểm xã hội theo vùng không?
-- **Chia tiền**: chia đều hay chia theo tỉ lệ? Có export không?
-- **Tiết kiệm**: tính lãi kép hay đơn? Có hỗ trợ gửi định kỳ không?
+- **Chia tiền**: mode "chia đều" vs mode "từng món" — 1 tool, 2 tab?
+- **Tính lãi vay**: lãi đơn / lãi kép / dư nợ giảm dần — cần cả 3 hay chọn 1?
 
 ---
 
@@ -80,8 +68,11 @@ utility-tools/
 ├── src/
 │   ├── App.jsx              ← routes
 │   ├── pages/
-│   │   ├── Home/            ← trang chủ / = danh sách 12 tools
-│   │   └── TinhTienDien/    ← tool duy nhất đã build
+│   │   ├── Home/            ← trang chủ / = danh sách 8 tools
+│   │   ├── TinhTienDien/    ← ✅ Live
+│   │   ├── TinhTienNuoc/    ← ✅ Live
+│   │   ├── TinhLuong/       ← ✅ Live
+│   │   └── LaiTheTinDung/   ← ✅ Live
 │   ├── data/
 │   │   └── electricityRates.js  ← toàn bộ bảng giá EVN QĐ 1279
 │   └── components/
@@ -89,6 +80,5 @@ utility-tools/
 ├── public/
 │   └── og-image.png         ← OG thumbnail (1200×630)
 ├── index.html               ← OG meta tags
-├── ROADMAP.md               ← file này
-└── /tinh-tien-dien/spec.md  ← spec v4 (verified data + use case TOU)
+└── ROADMAP.md               ← file này
 ```
