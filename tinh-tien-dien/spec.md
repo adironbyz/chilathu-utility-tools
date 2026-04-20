@@ -3,7 +3,7 @@
 > **Status:** Draft v4 — data verified từ QĐ 1279, xác định use case TOU
 > **Created:** 2026-04-18
 > **Updated:** 2026-04-18
-> **URL:** `tools.chilathu.com/tinh-tien-dien`
+> **URL:** `tienich.chilathu.com/tinh-tien-dien`
 > **Summary:** Công cụ tính tiền điện phổ quát theo QĐ 1279/QĐ-BCT 2025 — hỗ trợ tất cả nhóm khách hàng: sinh hoạt, kinh doanh (TOU), sản xuất công nghiệp (TOU), nông nghiệp, hành chính sự nghiệp. Hardcode giá từ văn bản pháp lý, không cần backend, build 1 lần dùng lâu dài.
 
 ---
@@ -23,7 +23,7 @@
 
 ## Main Flow
 
-1. User truy cập `tools.chilathu.com/tinh-tien-dien`
+1. User truy cập `tienich.chilathu.com/tinh-tien-dien`
 2. User chọn **nhóm khách hàng**: Sinh hoạt / Kinh doanh / Sản xuất / Nông nghiệp / Hành chính SN
 3. Nếu chọn Kinh doanh hoặc Sản xuất → hiện thêm **cấp điện áp** + **selector vùng miền** (nếu có khác biệt giá)
 4. User nhập kWh — sinh hoạt nhập 1 ô; TOU nhập 3 ô (thấp điểm / bình thường / cao điểm)
@@ -201,7 +201,7 @@ Không áp dụng TOU. Input: 1 ô kWh duy nhất.
 
 **Share link** — encode state vào URL params:
 ```
-tools.chilathu.com/tinh-tien-dien?kwh=250
+tienich.chilathu.com/tinh-tien-dien?kwh=250
 ```
 - Mở link → auto-populate kWh + tính ngay
 - Nút "Share link" copy URL vào clipboard

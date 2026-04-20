@@ -4,6 +4,8 @@ import { Logo } from '../../components/Logo.jsx'
 import SEO from '../../components/SEO.jsx'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { DashboardSquare01Icon, Link01Icon, LinkSquare01Icon } from '@hugeicons/core-free-icons'
+import { AffiliateBlock } from '../../components/affiliate/index.js'
+import '../../components/affiliate/Affiliate.css'
 import './LaiTheTinDung.css'
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -344,6 +346,17 @@ export default function LaiTheTinDung() {
           )}
         </div>
 
+        {/* Affiliate block — angle: "user đang đốt tiền lãi thẻ, cân nhắc vay tín chấp lãi thấp hơn" */}
+        {valid && monthlyInterest > 0 && (
+          <AffiliateBlock
+            tool="lai-the-tin-dung"
+            cta={{
+              benefit: 'Vay trả nợ thẻ — lãi thường thấp hơn 2–3 lần',
+              contextLine: `Mỗi tháng thẻ đang tính ~${fmtFull(monthlyInterest)} tiền lãi.`,
+            }}
+          />
+        )}
+
         {/* Disclaimer */}
         {valid && (
           <div className="ltc-disclaimer">
@@ -354,7 +367,7 @@ export default function LaiTheTinDung() {
         {/* Soft CTA */}
         <a
           className="ltc-cta"
-          href="https://app.chilathu.com?utm_source=tools.chilathu.com&utm_medium=tool&utm_campaign=ltc_footer"
+          href="https://app.chilathu.com?utm_source=tienich.chilathu.com&utm_medium=tool&utm_campaign=ltc_footer"
           target="_blank"
           rel="noopener noreferrer"
         >

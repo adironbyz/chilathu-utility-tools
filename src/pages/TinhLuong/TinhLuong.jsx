@@ -388,7 +388,7 @@ export default function TinhLuong() {
         {/* Soft CTA */}
         <a
           className="tln-cta"
-          href="https://app.chilathu.com?utm_source=tools.chilathu.com&utm_medium=tool&utm_campaign=tln_footer"
+          href="https://app.chilathu.com?utm_source=tienich.chilathu.com&utm_medium=tool&utm_campaign=tln_footer"
           target="_blank"
           rel="noopener noreferrer"
         >

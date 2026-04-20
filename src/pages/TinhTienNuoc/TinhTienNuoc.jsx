@@ -406,7 +406,7 @@ export default function TinhTienNuoc() {
         {/* Soft CTA */}
         <a
           className="ttn-cta"
-          href="https://app.chilathu.com?utm_source=tools.chilathu.com&utm_medium=tool&utm_campaign=ttn_footer"
+          href="https://app.chilathu.com?utm_source=tienich.chilathu.com&utm_medium=tool&utm_campaign=ttn_footer"
           target="_blank"
           rel="noopener noreferrer"
         >

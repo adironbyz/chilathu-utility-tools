@@ -603,7 +603,7 @@ export default function ChiaTien() {
 
         <a
           className="ct-cta"
-          href="https://app.chilathu.com?utm_source=tools.chilathu.com&utm_medium=tool&utm_campaign=chiaTien_footer"
+          href="https://app.chilathu.com?utm_source=tienich.chilathu.com&utm_medium=tool&utm_campaign=chiaTien_footer"
           target="_blank"
           rel="noopener noreferrer"
         >

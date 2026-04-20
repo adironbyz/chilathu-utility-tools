@@ -5,7 +5,7 @@ import { Logo } from '../../components/Logo.jsx'
 import SEO from '../../components/SEO.jsx'
 import './Home.css'
 
-const UTM = '?utm_source=tools.chilathu.com&utm_medium=hub&utm_campaign=tools_home'
+const UTM = '?utm_source=tienich.chilathu.com&utm_medium=hub&utm_campaign=tools_home'
 const BILLS_URL = `https://app.chilathu.com${UTM}`
 
 const TOOLS = [
@@ -153,7 +153,7 @@ export default function Home() {
       </main>
 
       <footer className="home-footer">
-        <span>© ChilàThu · tools.chilathu.com</span>
+        <span>© ChilàThu · tienich.chilathu.com</span>
       </footer>
     </div>
   )

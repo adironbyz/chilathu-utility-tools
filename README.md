@@ -1,7 +1,7 @@
 # ChilàThu — Utility Tools
 
 Bộ micro-tools tính toán tài chính cho người dùng Việt.
-Deploy tại: `tools.chilathu.com`
+Deploy tại: `tienich.chilathu.com`
 
 ## Tech stack
 - React + Vite
@@ -12,29 +12,25 @@ Deploy tại: `tools.chilathu.com`
 
 | Branch | Mục đích |
 |--------|----------|
-| `main` | Production → tools.chilathu.com |
+| `main` | Production → tienich.chilathu.com |
 | `develop` | Integration — merge các tool trước khi lên main |
 | `tool/[slug]` | Feature branch từng tool |
 
-## Tools
+## Tools live (8)
 
-### Sprint 1
-- `tool/tinh-tien-dien` — Tính tiền điện EVN bậc thang
-- `tool/tinh-luong` — Tính lương net/gross
-- `tool/tinh-lai-vay` — Tính lãi vay tiêu dùng
-- `tool/chia-tien` — Chia tiền nhóm
+| Slug | Tên |
+|------|-----|
+| `/tinh-tien-dien` | Tính tiền điện EVN bậc thang |
+| `/tinh-tien-nuoc` | Tính tiền nước bậc thang (63 tỉnh) |
+| `/tinh-luong` | Tính lương Net/Gross |
+| `/tinh-lai-vay` | Tính lãi vay (4 mode: vay nhanh / mua nhà / mua xe / tiêu dùng) |
+| `/tra-gop` | Tính trả góp (0% / 0% có phí / có lãi) |
+| `/lai-the-tin-dung` | Lãi thẻ tín dụng quá hạn |
+| `/chia-tien` | Chia tiền nhóm (đều / theo món) |
+| `/chi-phi-du-lich` | Chi phí du lịch (7 hạng mục, đổi ngoại tệ) |
 
-### Sprint 2
-- `tool/tra-gop` — Trả góp 0% có thật không?
-- `tool/tinh-tien-nuoc` — Tính tiền nước
-- `tool/tiet-kiem` — Tiết kiệm bao lâu mua được X?
-- `tool/chia-bill` — Chia bill nhà hàng
-
-### Sprint 3
-- `tool/lai-the-tin-dung` — Lãi thẻ tín dụng nếu trả tối thiểu
-- `tool/mua-duoc-khong` — Mua được không?
-- `tool/chi-phi-du-lich` — Chi phí du lịch/đầu người
-- `tool/quy-khan-cap` — Quỹ khẩn cấp cần bao nhiêu?
+### Dropped
+Từng có trong plan cũ, không làm nữa: `tiet-kiem`, `mua-duoc-khong`, `quy-khan-cap`, `chia-bill`.
 
 ## Deploy
 Mỗi `tool/*` branch có thể preview riêng trên Cloudflare Pages.

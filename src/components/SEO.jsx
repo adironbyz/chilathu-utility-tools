@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async'
 
 const SITE_NAME = 'ChilàThu Tools'
-const BASE_URL  = 'https://tools.chilathu.com'
+const BASE_URL  = 'https://tienich.chilathu.com'
 const OG_IMAGE  = `${BASE_URL}/og-image.png`
 
 /**

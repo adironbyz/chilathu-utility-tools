@@ -109,32 +109,55 @@ function BucketChart({ tiers }) {
   )
 }
 
-// TOU summary — kinh doanh / sản xuất (flat rate theo khung giờ, không lũy tiến)
+// TOU chart — dùng bucket fill style (giống BucketChart sinh hoạt)
 function TouChart({ rows }) {
   if (!rows) return null
-  const TOU_COLORS = { off: '#86efac', normal: '#4ade80', peak: '#ef4444' }
-  const keys = ['off', 'normal', 'peak']
+  const TOU_FILL  = ['#86efac', '#4ade80', '#ef4444']
+  const TOU_BADGE = ['#16a34a', '#15803d', '#b91c1c']
+  const maxAmount = Math.max(...rows.map(r => r.amount), 1)
+
   return (
-    <div className="ttd-chart">
-      <span className="ttd-chart-title">Chi phí theo khung giờ</span>
-      {rows.map((row, i) => {
-        const maxAmount = Math.max(...rows.map(r => r.amount), 1)
-        const pct = maxAmount > 0 ? (row.amount / maxAmount) * 100 : 0
-        return (
-          <div key={i} className="ttd-chart-row">
-            <span className="ttd-chart-label">{row.label.replace('Giờ ', '')}</span>
-            <div className="ttd-chart-bar-wrap">
-              <div
-                className="ttd-chart-bar"
-                style={{ width: `${pct}%`, background: TOU_COLORS[keys[i]] }}
-              />
+    <div className="ttd-buckets-wrap">
+      <span className="ttd-buckets-title">Chi phí theo khung giờ</span>
+      <div className="ttd-pit-buckets">
+        {rows.map((row, i) => {
+          const isEmpty = row.kwh === 0
+          const fillPct = isEmpty ? 0 : (row.amount / maxAmount) * 100
+          const name    = row.label.replace('Giờ ', '')
+
+          return (
+            <div key={i} className={`ttd-bucket${isEmpty ? ' ttd-bucket--next' : ''}`}>
+              <div className="ttd-bucket-header">
+                <div className="ttd-bucket-left">
+                  <span
+                    className="ttd-bucket-badge"
+                    style={{ background: isEmpty ? 'var(--m-muted)' : TOU_BADGE[i] }}
+                  >{name}</span>
+                </div>
+                <span className="ttd-bucket-meta">
+                  {isEmpty
+                    ? <span className="ttd-bucket-next-label">0 kWh</span>
+                    : formatVND(row.amount)
+                  }
+                </span>
+              </div>
+              <div className="ttd-bucket-track">
+                {fillPct > 0 && (
+                  <div
+                    className="ttd-bucket-fill"
+                    style={{ width: `${fillPct}%`, background: TOU_FILL[i] }}
+                  />
+                )}
+              </div>
+              {!isEmpty && row.kwh > 0 && row.price > 0 && (
+                <div className="ttd-bucket-hint">
+                  {row.kwh.toLocaleString('vi-VN')} kWh × {row.price.toLocaleString('vi-VN')}đ/kWh
+                </div>
+              )}
             </div>
-            <span className={`ttd-chart-val${row.amount === 0 ? ' zero' : ''}`}>
-              {row.amount > 0 ? formatVND(row.amount) : '—'}
-            </span>
-          </div>
-        )
-      })}
+          )
+        })}
+      </div>
     </div>
   )
 }

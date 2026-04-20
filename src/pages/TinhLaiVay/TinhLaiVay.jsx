@@ -4,6 +4,8 @@ import { Logo } from '../../components/Logo.jsx'
 import SEO from '../../components/SEO.jsx'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { DashboardSquare01Icon, Link01Icon, LinkSquare01Icon } from '@hugeicons/core-free-icons'
+import { AffiliateBlock } from '../../components/affiliate/index.js'
+import '../../components/affiliate/Affiliate.css'
 import './TinhLaiVay.css'
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -640,6 +642,22 @@ export default function TinhLaiVay() {
           )}
         </div>
 
+        {valid && mode !== 'home' && monthlyPayment && (
+          <AffiliateBlock
+            tool="tinh-lai-vay"
+            cta={{
+              benefit:
+                mode === 'quick'
+                  ? 'Cần vay gấp? Duyệt trong 5 phút'
+                  : mode === 'car'
+                  ? 'Vay tín chấp mua xe — hạn mức tới 1 tỷ'
+                  : 'Vay tiêu dùng nhanh hơn — lãi suất ngân hàng',
+              contextLine: `Khoản ${fmtFull(principal)}, trả ~${fmtFull(monthlyPayment)}/tháng.`,
+            }}
+            comparisonTitle="Cân nhắc thêm các bên khác"
+          />
+        )}
+
         {valid && (
           <div className="tlv-disclaimer">
             📌 Kết quả mang tính tham khảo. Lãi suất thực tế, phí trả trước hạn và điều kiện vay phụ thuộc hợp đồng với tổ chức tín dụng.
@@ -648,7 +666,7 @@ export default function TinhLaiVay() {
 
         <a
           className="tlv-cta"
-          href="https://app.chilathu.com?utm_source=tools.chilathu.com&utm_medium=tool&utm_campaign=tlv_footer"
+          href="https://app.chilathu.com?utm_source=tienich.chilathu.com&utm_medium=tool&utm_campaign=tlv_footer"
           target="_blank"
           rel="noopener noreferrer"
         >

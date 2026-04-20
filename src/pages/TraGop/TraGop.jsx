@@ -4,6 +4,8 @@ import { Logo } from '../../components/Logo.jsx'
 import SEO from '../../components/SEO.jsx'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { DashboardSquare01Icon, Link01Icon, LinkSquare01Icon } from '@hugeicons/core-free-icons'
+import { AffiliateBlock } from '../../components/affiliate/index.js'
+import '../../components/affiliate/Affiliate.css'
 import './TraGop.css'
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -406,6 +408,19 @@ export default function TraGop() {
           )}
         </div>
 
+        {valid && monthlyPayment > 0 && (
+          <AffiliateBlock
+            tool="tra-gop"
+            cta={{
+              benefit:
+                mode === 'interest'
+                  ? 'Vay tín chấp thay vì trả góp — lãi có thể rẻ hơn'
+                  : 'Cần tiền mặt cho khoản mua này? Duyệt trong 5 phút',
+              contextLine: `Hàng ${fmtFull(price)}, trả góp ~${fmtFull(monthlyPayment)}/tháng.`,
+            }}
+          />
+        )}
+
         {valid && mode === 'fee' && effectiveAPR > 0 && (
           <div className="tg-disclaimer">
             📌 "0% lãi suất" nhưng phí chuyển đổi {feeStr}%/tháng tương đương lãi suất thực <strong>{effectiveAPR.toFixed(1)}%/năm</strong>. Hãy so sánh trước khi quyết định.
@@ -420,7 +435,7 @@ export default function TraGop() {
 
         <a
           className="tg-cta"
-          href="https://app.chilathu.com?utm_source=tools.chilathu.com&utm_medium=tool&utm_campaign=tragop_footer"
+          href="https://app.chilathu.com?utm_source=tienich.chilathu.com&utm_medium=tool&utm_campaign=tragop_footer"
           target="_blank"
           rel="noopener noreferrer"
         >

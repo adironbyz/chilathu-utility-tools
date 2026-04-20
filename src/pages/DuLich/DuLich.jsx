@@ -477,7 +477,7 @@ export default function DuLich() {
 
         <a
           className="dl-cta"
-          href="https://app.chilathu.com?utm_source=tools.chilathu.com&utm_medium=tool&utm_campaign=dulich_footer"
+          href="https://app.chilathu.com?utm_source=tienich.chilathu.com&utm_medium=tool&utm_campaign=dulich_footer"
           target="_blank"
           rel="noopener noreferrer"
         >

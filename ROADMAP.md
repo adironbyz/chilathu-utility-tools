@@ -1,5 +1,5 @@
 # ChilàThu Tools — Roadmap
-> Domain: `tools.chilathu.com` · Tech: React + Vite · Deploy: Cloudflare Pages
+> Domain: `tienich.chilathu.com` · Tech: React + Vite · Deploy: Cloudflare Pages
 > Cập nhật: 2026-04-19
 
 ---
@@ -14,8 +14,10 @@
 ### Tool page structure (bắt buộc)
 - **Header**: Logo (left) + `DashboardSquare01Icon` navigate('/') (right) — KHÔNG có tool name ở header
 - **Body đầu tiên**: `<h1 className="ttd-page-title">` — tool name to, rõ, trong content
+- **Affiliate block** (sau result card): `<AffiliateBlock tool="..." cta={...} />` —
+  contextual CTA + comparison table + disclosure. Chỉ render sau khi user ra kết quả.
+  Xem `src/components/affiliate/README.md`.
 - **Footer**: 1 dòng text link "Theo dõi thu chi với Chilathu.com" + `LinkSquare01Icon` — KHÔNG đóng khung card
-- Không có affiliate card
 
 ---
 
@@ -45,19 +47,59 @@
 
 | Hạng mục | Status | Ghi chú |
 |----------|--------|---------|
-| Domain `tools.chilathu.com` | ✅ Live | Cloudflare Pages |
+| Domain `tienich.chilathu.com` | ✅ Live | Cloudflare Pages |
 | OG meta tags | ✅ Done | og:image.png trong `public/`, static cho tất cả routes |
 | Home page `/` | ✅ Done | Grid 8 tools + bills-app flagship card (UTM) |
 | Dynamic OG per tool | ⬜ Backlog | Cần Cloudflare Pages Functions — scope sau |
 | Nông nghiệp pricing | ⬜ Pending | Chờ ảnh QĐ 1279 trang nông nghiệp |
-| GA4 tracking | ⬜ Chưa setup | Cần thêm gtag vào index.html |
+| GA4 tracking | ✅ Live | Measurement ID `G-Z5P0XQWL0N` đã trong `index.html`. Event `affiliate_clicked` tự fire qua `trackAffiliateClick()` khi `AffiliateBlock` được plug vào. |
 
 ---
 
-## Pending decisions
+## Affiliate monetization
 
-- **Chia tiền**: mode "chia đều" vs mode "từng món" — 1 tool, 2 tab?
-- **Tính lãi vay**: lãi đơn / lãi kép / dư nợ giảm dần — cần cả 3 hay chọn 1?
+> Plan gốc: `tools-chilathu-affiliate-plan.md` (2026-04). Lý do build: đang chạy ads kéo traffic → cần monetize.
+
+### Components — shared (✅ Live)
+- `src/data/affiliates.js` — brand registry (10 brand Tier 1+2) + tool→brand mapping + SubID/URL helpers
+- `src/lib/affiliateTracking.js` — GA4 `affiliate_clicked` event; stub sẵn cho DB log khi Worker ready
+- `src/components/affiliate/` — `AffiliateBlock` (wrapper) + `AffiliateCTA` + `AffiliateComparison` + `AffiliateDisclosure`
+- Style prefix `.ta-*`, 100% `--m-*` tokens
+
+### Tool integration status
+
+8 tool đều live. Mapping sẵn trong `src/data/affiliates.js`.
+
+| Tool | Tier | Mapping (featured + comparison) | Plugged in? |
+|------|------|---------|-------------|
+| `/tinh-luong` | S | Cake + TNEX/Timo/Finhay/Tikop | ⬜ TODO |
+| `/tinh-lai-vay` | S | FE Credit + Home Credit/Cake/TPBank | ⬜ TODO |
+| `/tra-gop` | S | Home Credit + FE Credit/TPBank | ⬜ TODO |
+| `/lai-the-tin-dung` | S | TPBank + Shinhan/Cake | ⬜ TODO |
+| `/tinh-tien-dien` | A | Cake + TNEX/Timo (bill payment angle) | ⬜ TODO |
+| `/tinh-tien-nuoc` | A | TNEX + Cake/Timo | ⬜ TODO |
+| `/chia-tien` | A | TNEX + Timo/Cake (free-transfer angle) | ⬜ TODO |
+| `/chi-phi-du-lich` | B | TPBank + Shinhan/Cake (FX / cashback) | ⬜ TODO |
+
+### Infrastructure — affiliate
+
+| Hạng mục | Status | Ghi chú |
+|----------|--------|---------|
+| Accesstrade publisher apply | ⬜ TODO | Apply với domain root `chilathu.com` |
+| Tier 1 campaigns | ⬜ TODO | Cake, TNEX, Timo, Finhay, Tikop, Infina |
+| Tier 2 campaigns | ⬜ TODO | TPBank, Shinhan, FE Credit, Home Credit — apply sau 2-4 tuần có traffic proof |
+| Redirect layer `/go/:brand` | ⬜ TODO | Cloudflare Worker + Supabase `affiliate_clicks` table — swap URL builder khi ready |
+| Admin tool (link management) | ⬜ Backlog | Build ở tháng 2+ khi scale theo plan section 7 |
+
+---
+
+## Dropped — không làm nữa
+
+Ba tool khỏi Sprint 3 cũ đã drop (2026-04-19). Folder rỗng ở root cần xoá khi dọn repo.
+
+- `tiet-kiem` — Tiết kiệm bao lâu mua được X? (overlap với app.chilathu.com goal feature)
+- `mua-duoc-khong` — Mua được không? (intent nhẹ, không pay-off)
+- `quy-khan-cap` — Quỹ khẩn cấp cần bao nhiêu? (content, không tính toán)
 
 ---
 
@@ -66,17 +108,29 @@
 ```
 utility-tools/
 ├── src/
-│   ├── App.jsx              ← routes
-│   ├── pages/
-│   │   ├── Home/            ← trang chủ / = danh sách 8 tools
-│   │   ├── TinhTienDien/    ← ✅ Live
-│   │   ├── TinhTienNuoc/    ← ✅ Live
-│   │   ├── TinhLuong/       ← ✅ Live
-│   │   └── LaiTheTinDung/   ← ✅ Live
+│   ├── App.jsx              ← routes (8 tools)
+│   ├── pages/               ← Home + 8 tool pages, tất cả ✅ Live
+│   │   ├── Home/
+│   │   ├── TinhTienDien/
+│   │   ├── TinhTienNuoc/
+│   │   ├── TinhLuong/
+│   │   ├── LaiTheTinDung/
+│   │   ├── TinhLaiVay/
+│   │   ├── TraGop/
+│   │   ├── ChiaTien/
+│   │   └── DuLich/
 │   ├── data/
-│   │   └── electricityRates.js  ← toàn bộ bảng giá EVN QĐ 1279
+│   │   ├── electricityRates.js  ← bảng giá EVN QĐ 1279
+│   │   ├── salaryRates.js       ← BHXH + thuế TNCN lũy tiến
+│   │   ├── waterRates.js        ← bậc thang nước 63 tỉnh
+│   │   └── affiliates.js        ← brand registry + tool mapping + URL/SubID helpers
+│   ├── lib/
+│   │   └── affiliateTracking.js ← GA4 event + DB log stub
 │   └── components/
-│       └── Logo.jsx
+│       ├── Logo.jsx
+│       ├── SEO.jsx
+│       ├── ToolMenu.jsx
+│       └── affiliate/           ← AffiliateBlock / CTA / Comparison / Disclosure + README
 ├── public/
 │   └── og-image.png         ← OG thumbnail (1200×630)
 ├── index.html               ← OG meta tags
