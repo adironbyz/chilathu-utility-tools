@@ -27,7 +27,11 @@
 //   - slug: dùng trong SubID
 //   - name: hiển thị
 //   - initial: fallback logo (colored square) — 1-2 chữ
+//              Dùng khi logoSrc trống HOẶC ảnh load fail (onError).
 //   - color: bg color cho initial square
+//   - logoSrc: URL ảnh logo brand (optional). Nếu có → render <img>, fallback
+//              sang initial+color nếu URL hỏng. Khuyến nghị PNG/SVG vuông,
+//              background trong suốt, ≥80x80px.
 //   - tagline: short benefit (brand-neutral)
 //   - metric: benefit kèm số (ví dụ "Lãi suất 5.6%") — có thể override per-tool
 //   - url: affiliate link (đã có UTM/sub sẽ được builder append thêm)
@@ -42,6 +46,7 @@ const DEFAULT_BRANDS = {
     name: 'VIB App Max',
     initial: 'M',
     color: '#FF6A00',
+    logoSrc: 'https://logo.clearbit.com/vib.com.vn',
     tagline: 'Vay nhanh, thẻ tín dụng, trả góp trong 1 app',
     metric: 'Duyệt trong 5 phút · hạn mức tới 1 tỷ',
     referralCode: 'PAAT_2200776',

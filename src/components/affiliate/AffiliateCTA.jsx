@@ -28,21 +28,7 @@ import { ArrowRight01Icon } from '@hugeicons/core-free-icons'
 import { buildAffiliateUrl } from '../../data/affiliates.js'
 import { trackAffiliateClick } from '../../lib/affiliateTracking.js'
 import AffiliateReferralModal from './AffiliateReferralModal.jsx'
-
-function BrandLogo({ brand }) {
-  if (brand.logoSrc) {
-    return (
-      <div className="ta-logo">
-        <img src={brand.logoSrc} alt={brand.name} />
-      </div>
-    )
-  }
-  return (
-    <div className="ta-logo" style={{ background: brand.color }}>
-      {brand.initial}
-    </div>
-  )
-}
+import BrandLogo from './BrandLogo.jsx'
 
 export default function AffiliateCTA({
   brand,

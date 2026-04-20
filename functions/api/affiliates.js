@@ -41,6 +41,12 @@ function validateConfig(data) {
     }
     if (typeof brand.name !== 'string') return `Brand ${slug}: thiếu name`
     if (typeof brand.url !== 'string') return `Brand ${slug}: thiếu url`
+    // logoSrc là optional — nếu có thì phải là string http(s) URL.
+    if (brand.logoSrc !== undefined && brand.logoSrc !== '' && brand.logoSrc !== null) {
+      if (typeof brand.logoSrc !== 'string' || !/^https?:\/\//.test(brand.logoSrc)) {
+        return `Brand ${slug}: logoSrc phải là URL http(s)`
+      }
+    }
   }
   for (const [tool, mapping] of Object.entries(data.toolAffiliates)) {
     if (!mapping || typeof mapping !== 'object') return `Tool ${tool} không hợp lệ`

@@ -24,8 +24,10 @@ import {
   Logout01Icon,
   CheckmarkCircle01Icon,
   AlertCircleIcon,
+  HelpCircleIcon,
 } from '@hugeicons/core-free-icons'
 import { getDefaultAffiliateConfig } from '../../data/affiliates.js'
+import AdminHelp from './AdminHelp.jsx'
 import './Admin.css'
 
 // ─── API helpers ────────────────────────────────────────────────────────────
@@ -55,6 +57,7 @@ function emptyBrand(slug = '') {
     name: '',
     initial: '',
     color: '#48A887',
+    logoSrc: '',
     tagline: '',
     metric: '',
     url: 'https://',
@@ -116,18 +119,39 @@ function LoginView({ onAuth }) {
 
 // ─── Brand card — edit 1 brand inline ──────────────────────────────────────
 
+// Live preview logo: img nếu logoSrc hợp lệ, fallback initial+color nếu ảnh fail.
+// Re-mount khi logoSrc đổi (key=logoSrc) để retry sau khi user sửa URL.
+function BrandLogoPreview({ brand }) {
+  const [failed, setFailed] = useState(false)
+  const showImg = brand.logoSrc && !failed
+  if (showImg) {
+    return (
+      <div className="ad-brand-logo ad-brand-logo-img">
+        <img
+          src={brand.logoSrc}
+          alt={brand.name || brand.slug}
+          onError={() => setFailed(true)}
+        />
+      </div>
+    )
+  }
+  return (
+    <div
+      className="ad-brand-logo"
+      style={{ background: brand.color || '#48A887' }}
+    >
+      {brand.initial || '?'}
+    </div>
+  )
+}
+
 function BrandCard({ brand, onChange, onDelete, canDelete }) {
   const update = (patch) => onChange({ ...brand, ...patch })
 
   return (
     <div className={`ad-brand-card${brand.approved ? ' is-approved' : ''}`}>
       <div className="ad-brand-head">
-        <div
-          className="ad-brand-logo"
-          style={{ background: brand.color || '#48A887' }}
-        >
-          {brand.initial || '?'}
-        </div>
+        <BrandLogoPreview key={brand.logoSrc || 'fallback'} brand={brand} />
 
         <div className="ad-brand-head-body">
           <div className="ad-brand-name">{brand.name || '(chưa có tên)'}</div>
@@ -184,6 +208,18 @@ function BrandCard({ brand, onChange, onDelete, canDelete }) {
               onChange={(e) => update({ color: e.target.value })}
             />
           </div>
+        </label>
+
+        <label className="ad-field ad-field-wide">
+          <span className="ad-field-label">
+            Logo URL (optional — để trống sẽ dùng Initial + Color)
+          </span>
+          <input
+            type="text"
+            value={brand.logoSrc || ''}
+            onChange={(e) => update({ logoSrc: e.target.value })}
+            placeholder="https://logo.clearbit.com/vib.com.vn"
+          />
         </label>
 
         <label className="ad-field ad-field-wide">
@@ -313,6 +349,7 @@ function Editor({ onLogout }) {
   const [saving, setSaving] = useState(false)
   const [toast, setToast] = useState(null) // {type: 'ok'|'err', text}
   const [newBrandSlug, setNewBrandSlug] = useState('')
+  const [helpOpen, setHelpOpen] = useState(false)
 
   // Load config
   useEffect(() => {
@@ -434,6 +471,14 @@ function Editor({ onLogout }) {
         <div className="ad-header-actions">
           <button
             className="ad-btn-ghost"
+            onClick={() => setHelpOpen(true)}
+            title="Xem hướng dẫn sử dụng"
+          >
+            <HugeiconsIcon icon={HelpCircleIcon} size={14} strokeWidth={2} />
+            Hướng dẫn
+          </button>
+          <button
+            className="ad-btn-ghost"
             onClick={handleResetDefaults}
             title="Reset config về mặc định"
           >
@@ -553,6 +598,8 @@ function Editor({ onLogout }) {
           {toast.text}
         </div>
       )}
+
+      <AdminHelp open={helpOpen} onClose={() => setHelpOpen(false)} />
     </div>
   )
 }

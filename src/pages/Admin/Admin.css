@@ -149,6 +149,23 @@
   color: #fff;
   flex-shrink: 0;
   text-transform: uppercase;
+  overflow: hidden;
+}
+
+/* Img variant — override initial-style bg/color; thêm border để tách với bg
+   card khi logo có transparent background. */
+.ad-brand-logo-img {
+  background: #fff !important;
+  border: 1px solid var(--m-border);
+  color: transparent;
+}
+
+.ad-brand-logo-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 2px;
+  display: block;
 }
 
 .ad-brand-head-body {
@@ -711,5 +728,410 @@
   }
   .ad-footer {
     padding: 12px 16px;
+  }
+}
+
+/* ─── Help drawer (tutorial) ───────────────────────────────────────────── */
+
+.ad-help-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 100;
+  animation: ad-help-fade-in var(--m-dur-fast) var(--m-ease-out) both;
+}
+
+.ad-help-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 420px;
+  background: var(--m-card);
+  z-index: 101;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -8px 0 24px rgba(0, 0, 0, 0.08);
+  animation: ad-help-slide-in var(--m-dur-sheet-enter) var(--m-ease-ios) both;
+}
+
+@keyframes ad-help-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes ad-help-slide-in {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.ad-help-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--m-divider);
+  flex-shrink: 0;
+}
+
+.ad-help-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--m-ink);
+  margin: 0;
+  letter-spacing: -0.2px;
+}
+
+.ad-help-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: var(--m-subtle);
+  color: var(--m-ink-secondary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background var(--m-dur-fast) var(--m-ease-out);
+}
+
+.ad-help-close:hover {
+  background: var(--m-border);
+  color: var(--m-ink);
+}
+
+.ad-help-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.ad-help-section {
+  margin-bottom: 28px;
+}
+
+.ad-help-section:last-child {
+  margin-bottom: 0;
+}
+
+.ad-help-section-head {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+
+.ad-help-num {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--m-green);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+}
+
+.ad-help-section-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--m-ink);
+  margin: 0 0 4px 0;
+  letter-spacing: -0.1px;
+}
+
+.ad-help-section-when {
+  font-size: 12px;
+  color: var(--m-muted);
+  margin: 0;
+  line-height: 1.45;
+}
+
+.ad-help-steps {
+  list-style: none;
+  counter-reset: ad-step;
+  padding: 0;
+  margin: 0 0 14px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ad-help-steps li {
+  position: relative;
+  counter-increment: ad-step;
+  padding: 10px 12px 10px 34px;
+  background: #fafafa;
+  border-radius: 10px;
+  font-size: 13px;
+  color: var(--m-ink);
+  line-height: 1.55;
+}
+
+.ad-help-steps li::before {
+  content: counter(ad-step);
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--m-card);
+  border: 1px solid var(--m-border);
+  color: var(--m-ink-secondary);
+  font-size: 11px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ad-help-steps li code {
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 12px;
+  background: var(--m-subtle);
+  color: var(--m-ink);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.ad-help-steps li strong {
+  font-weight: 700;
+  color: var(--m-ink);
+}
+
+/* Mock UI inside steps */
+
+.ad-help-btn-mock {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 8px;
+  background: var(--m-green);
+  color: #fff;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+.ad-help-toggle-mock {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+.ad-help-toggle-mock.ad-off {
+  background: var(--m-subtle);
+  color: var(--m-muted);
+  border: 1px solid var(--m-border);
+}
+
+.ad-help-toggle-mock.ad-live {
+  background: var(--m-green);
+  color: #fff;
+}
+
+.ad-help-chip-demo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 8px 0 6px;
+}
+
+.ad-help-chip-mock {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 14px;
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--m-card);
+  border: 1px solid var(--m-border);
+  color: var(--m-ink-secondary);
+}
+
+.ad-help-chip-mock.ad-active {
+  background: var(--m-green-bg);
+  border-color: var(--m-green-border);
+  color: var(--m-green-dark);
+}
+
+.ad-help-status-mock {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--m-warning-bg);
+  color: #8a6a2a;
+  border: 1px solid var(--m-warning-border);
+  vertical-align: middle;
+}
+
+/* Field reference block */
+
+.ad-help-fields {
+  margin-top: 14px;
+  padding: 14px;
+  background: #fafafa;
+  border-radius: 12px;
+  border: 1px solid var(--m-divider);
+}
+
+.ad-help-fields-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--m-muted);
+  margin-bottom: 10px;
+}
+
+.ad-help-dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 8px 14px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.ad-help-dl dt {
+  font-weight: 700;
+  color: var(--m-ink);
+}
+
+.ad-help-dl dd {
+  margin: 0;
+  color: var(--m-ink-secondary);
+}
+
+.ad-help-dl dd code {
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 11px;
+  background: var(--m-subtle);
+  color: var(--m-ink);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.ad-help-tip {
+  display: block;
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--m-ink-secondary);
+  line-height: 1.5;
+}
+
+.ad-help-tip code {
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+}
+
+/* Concept box (Featured vs Comparison) */
+
+.ad-help-concept {
+  margin-bottom: 14px;
+  padding: 14px;
+  background: var(--m-green-bg);
+  border: 1px solid var(--m-green-border);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ad-help-concept-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.ad-help-concept-label {
+  flex-shrink: 0;
+  padding: 2px 8px;
+  background: var(--m-card);
+  border: 1px solid var(--m-green-border);
+  color: var(--m-green-dark);
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  min-width: 88px;
+  text-align: center;
+}
+
+.ad-help-concept-desc {
+  color: var(--m-ink);
+  flex: 1;
+}
+
+.ad-help-concept-desc strong {
+  font-weight: 700;
+}
+
+/* Tips section */
+
+.ad-help-tips-section .ad-help-section-title {
+  margin-bottom: 10px;
+}
+
+.ad-help-tips-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ad-help-tips-list li {
+  position: relative;
+  padding: 10px 12px 10px 28px;
+  background: #fafafa;
+  border-radius: 10px;
+  font-size: 12px;
+  color: var(--m-ink);
+  line-height: 1.55;
+}
+
+.ad-help-tips-list li::before {
+  content: '';
+  position: absolute;
+  left: 12px;
+  top: 16px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--m-muted);
+}
+
+.ad-help-tips-list li strong {
+  font-weight: 700;
+  color: var(--m-ink);
+}
+
+@media (max-width: 640px) {
+  .ad-help-drawer {
+    max-width: 100%;
+  }
+  .ad-help-body {
+    padding: 16px;
+  }
+  .ad-help-dl {
+    grid-template-columns: 90px 1fr;
+    gap: 6px 10px;
   }
 }
