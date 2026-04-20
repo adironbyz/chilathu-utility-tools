@@ -46,7 +46,15 @@ export default function AffiliateBlock({
   if (!config) return null
 
   const hasCTA = !!cta && !!config.featured
-  const hasComparison = showComparison && config.comparison.length > 0
+
+  // Filter featured brand out of comparison list — tránh lặp:
+  // featured đã được show to ở trên rồi, bảng "các bên khác" phải là
+  // các bên khác thật. Dù admin có set trùng thì UI vẫn dedupe.
+  const comparisonBrands = hasCTA
+    ? config.comparison.filter((slug) => slug !== config.featured)
+    : config.comparison
+
+  const hasComparison = showComparison && comparisonBrands.length > 0
 
   if (!hasCTA && !hasComparison) return null
 
@@ -66,7 +74,7 @@ export default function AffiliateBlock({
 
       {hasComparison && (
         <AffiliateComparison
-          brands={config.comparison}
+          brands={comparisonBrands}
           tool={tool}
           title={comparisonTitle}
           customMetrics={customMetrics}

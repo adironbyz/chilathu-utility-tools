@@ -121,12 +121,14 @@ function LoginView({ onAuth }) {
 
 // Live preview logo: img nếu logoSrc hợp lệ, fallback initial+color nếu ảnh fail.
 // Re-mount khi logoSrc đổi (key=logoSrc) để retry sau khi user sửa URL.
-function BrandLogoPreview({ brand }) {
+// size='lg' cho editor (48x48), 'sm' cho sidebar row (32x32).
+function BrandLogoPreview({ brand, size = 'lg' }) {
   const [failed, setFailed] = useState(false)
   const showImg = brand.logoSrc && !failed
+  const sizeCls = size === 'sm' ? ' ad-brand-logo-sm' : ''
   if (showImg) {
     return (
-      <div className="ad-brand-logo ad-brand-logo-img">
+      <div className={`ad-brand-logo ad-brand-logo-img${sizeCls}`}>
         <img
           src={brand.logoSrc}
           alt={brand.name || brand.slug}
@@ -137,11 +139,33 @@ function BrandLogoPreview({ brand }) {
   }
   return (
     <div
-      className="ad-brand-logo"
+      className={`ad-brand-logo${sizeCls}`}
       style={{ background: brand.color || '#48A887' }}
     >
       {brand.initial || '?'}
     </div>
+  )
+}
+
+// Compact sidebar row — shows logo + name + live/off pill.
+function BrandSidebarRow({ brand, selected, onSelect }) {
+  return (
+    <button
+      type="button"
+      className={`ad-brand-row${selected ? ' is-selected' : ''}`}
+      onClick={onSelect}
+    >
+      <BrandLogoPreview key={brand.logoSrc || 'fallback'} brand={brand} size="sm" />
+      <div className="ad-brand-row-body">
+        <div className="ad-brand-row-name">{brand.name || `@${brand.slug}`}</div>
+        <div className="ad-brand-row-meta">
+          <span className={`ad-brand-row-status${brand.approved ? ' is-live' : ''}`}>
+            {brand.approved ? 'Live' : 'Off'}
+          </span>
+          <span className="ad-brand-row-slug">@{brand.slug}</span>
+        </div>
+      </div>
+    </button>
   )
 }
 
@@ -350,6 +374,7 @@ function Editor({ onLogout }) {
   const [toast, setToast] = useState(null) // {type: 'ok'|'err', text}
   const [newBrandSlug, setNewBrandSlug] = useState('')
   const [helpOpen, setHelpOpen] = useState(false)
+  const [selectedBrandSlug, setSelectedBrandSlug] = useState(null)
 
   // Load config
   useEffect(() => {
@@ -376,6 +401,18 @@ function Editor({ onLogout }) {
     () => (config ? Object.values(config.brands) : []),
     [config]
   )
+
+  // Auto-select sensible brand khi list đổi (initial load, add, delete).
+  // Tránh selected slug trỏ vào brand đã xoá hoặc null khi mới load.
+  useEffect(() => {
+    if (!config) return
+    const slugs = Object.keys(config.brands)
+    if (slugs.length === 0) {
+      if (selectedBrandSlug !== null) setSelectedBrandSlug(null)
+    } else if (!selectedBrandSlug || !config.brands[selectedBrandSlug]) {
+      setSelectedBrandSlug(slugs[0])
+    }
+  }, [config, selectedBrandSlug])
 
   // Check if a brand is referenced by any tool mapping — prevent delete.
   const brandInUse = useCallback(
@@ -412,6 +449,7 @@ function Editor({ onLogout }) {
       ...c,
       brands: { ...c.brands, [slug]: emptyBrand(slug) },
     }))
+    setSelectedBrandSlug(slug) // jump editor straight to new brand
     setNewBrandSlug('')
     showToast('ok', `Đã thêm brand "${slug}"`)
   }
@@ -512,36 +550,55 @@ function Editor({ onLogout }) {
 
       <main className="ad-main">
         {activeTab === 'brands' && (
-          <div className="ad-brands">
-            <div className="ad-add-brand">
-              <input
-                type="text"
-                placeholder="Brand slug mới (vd: mbbank, vpbank)"
-                value={newBrandSlug}
-                onChange={(e) => setNewBrandSlug(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && addBrand()}
-              />
-              <button className="ad-btn-primary ad-btn-compact" onClick={addBrand}>
-                <HugeiconsIcon icon={Add01Icon} size={14} strokeWidth={2} />
-                Thêm brand
-              </button>
-            </div>
-
-            {brandsList.length === 0 ? (
-              <div className="ad-brands-empty">
-                Chưa có brand nào — gõ slug bên trên rồi bấm <strong>Thêm brand</strong> để bắt đầu.
-              </div>
-            ) : (
-              brandsList.map((b) => (
-                <BrandCard
-                  key={b.slug}
-                  brand={b}
-                  onChange={(next) => updateBrand(b.slug, next)}
-                  onDelete={() => deleteBrand(b.slug)}
-                  canDelete={!brandInUse(b.slug)}
+          <div className="ad-brands-split">
+            <aside className="ad-brands-sidebar">
+              <div className="ad-add-brand">
+                <input
+                  type="text"
+                  placeholder="Brand slug mới (vd: mbbank)"
+                  value={newBrandSlug}
+                  onChange={(e) => setNewBrandSlug(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && addBrand()}
                 />
-              ))
-            )}
+                <button className="ad-btn-primary ad-btn-compact" onClick={addBrand}>
+                  <HugeiconsIcon icon={Add01Icon} size={14} strokeWidth={2} />
+                  Thêm
+                </button>
+              </div>
+
+              {brandsList.length === 0 ? (
+                <div className="ad-brands-empty">
+                  Chưa có brand nào — gõ slug bên trên rồi bấm <strong>Thêm</strong> để bắt đầu.
+                </div>
+              ) : (
+                <div className="ad-brands-list">
+                  {brandsList.map((b) => (
+                    <BrandSidebarRow
+                      key={b.slug}
+                      brand={b}
+                      selected={b.slug === selectedBrandSlug}
+                      onSelect={() => setSelectedBrandSlug(b.slug)}
+                    />
+                  ))}
+                </div>
+              )}
+            </aside>
+
+            <section className="ad-brands-editor">
+              {selectedBrandSlug && config.brands[selectedBrandSlug] ? (
+                <BrandCard
+                  key={selectedBrandSlug}
+                  brand={config.brands[selectedBrandSlug]}
+                  onChange={(next) => updateBrand(selectedBrandSlug, next)}
+                  onDelete={() => deleteBrand(selectedBrandSlug)}
+                  canDelete={!brandInUse(selectedBrandSlug)}
+                />
+              ) : (
+                <div className="ad-brands-empty-editor">
+                  Chọn brand bên trái để chỉnh, hoặc thêm brand mới.
+                </div>
+              )}
+            </section>
           </div>
         )}
 

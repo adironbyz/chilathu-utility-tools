@@ -243,7 +243,7 @@ function encodeShareUrl(params) {
 
 function readShareParams() {
   const p    = new URLSearchParams(window.location.search)
-  const mode = Object.keys(MODES).includes(p.get('mode')) ? p.get('mode') : 'home'
+  const mode = Object.keys(MODES).includes(p.get('mode')) ? p.get('mode') : 'quick'
   const cfg  = MODES[mode]
   return {
     mode,
