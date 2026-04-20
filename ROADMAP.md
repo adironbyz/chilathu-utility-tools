@@ -1,6 +1,6 @@
 # ChilàThu Tools — Roadmap
 > Domain: `tienich.chilathu.com` · Tech: React + Vite · Deploy: Cloudflare Pages
-> Cập nhật: 2026-04-19
+> Cập nhật: 2026-04-20
 
 ---
 
@@ -61,35 +61,48 @@
 > Plan gốc: `tools-chilathu-affiliate-plan.md` (2026-04). Lý do build: đang chạy ads kéo traffic → cần monetize.
 
 ### Components — shared (✅ Live)
-- `src/data/affiliates.js` — brand registry (10 brand Tier 1+2) + tool→brand mapping + SubID/URL helpers
+- `src/data/affiliates.js` — brand registry + tool→brand mapping + SubID/URL helpers.
+  **Defaults chỉ ship vibmax** (brand duy nhất approved). Các brand khác add runtime qua `/admin`.
 - `src/lib/affiliateTracking.js` — GA4 `affiliate_clicked` event; stub sẵn cho DB log khi Worker ready
-- `src/components/affiliate/` — `AffiliateBlock` (wrapper) + `AffiliateCTA` + `AffiliateComparison` + `AffiliateDisclosure`
+- `src/components/affiliate/` — `AffiliateBlock` (wrapper) + `AffiliateCTA` + `AffiliateComparison` + `AffiliateReferralModal` (interstitial cho app-based campaign cần mã) + `AffiliateDisclosure` + `BrandLogo` (shared, với `<img>` fallback → initial+color nếu ảnh fail)
 - Style prefix `.ta-*`, 100% `--m-*` tokens
+
+### Admin infrastructure (✅ Live)
+- `/admin` page — login + Editor UI. Quản lý brands + tool mappings mà không cần redeploy.
+- Cloudflare Pages Functions:
+  - `POST /api/admin/login` · `POST /api/admin/logout` · `GET /api/admin/session` — HMAC-SHA256 session cookie, HttpOnly/Secure/SameSite=Strict
+  - `GET /api/affiliates` · `POST /api/affiliates` — KV-backed config với validator
+- KV binding `AFFILIATES_KV` + env `ADMIN_PASSWORD` · `SESSION_SECRET` (xem `ADMIN-SETUP.md`)
+- App preload: `loadAffiliateConfig()` race với 1.5s timeout trong `App.jsx` — fail-safe về defaults nếu network chậm
+- In-app tutorial drawer (nút "Hướng dẫn" ở header) — 2 workflow: Thêm brand mới · Đổi featured/comparison + field reference
+- Brand schema: slug, name, initial, color, **logoSrc** (optional PNG/SVG URL; fallback initial+color nếu fail), tagline, metric, url, approved, referralCode
 
 ### Tool integration status
 
-8 tool đều live. Mapping sẵn trong `src/data/affiliates.js`.
-
-| Tool | Tier | Mapping (featured + comparison) | Plugged in? |
+| Tool | Tier | Featured (default) | Plugged in? |
 |------|------|---------|-------------|
-| `/tinh-luong` | S | Cake + TNEX/Timo/Finhay/Tikop | ⬜ TODO |
-| `/tinh-lai-vay` | S | FE Credit + Home Credit/Cake/TPBank | ⬜ TODO |
-| `/tra-gop` | S | Home Credit + FE Credit/TPBank | ⬜ TODO |
-| `/lai-the-tin-dung` | S | TPBank + Shinhan/Cake | ⬜ TODO |
-| `/tinh-tien-dien` | A | Cake + TNEX/Timo (bill payment angle) | ⬜ TODO |
-| `/tinh-tien-nuoc` | A | TNEX + Cake/Timo | ⬜ TODO |
-| `/chia-tien` | A | TNEX + Timo/Cake (free-transfer angle) | ⬜ TODO |
-| `/chi-phi-du-lich` | B | TPBank + Shinhan/Cake (FX / cashback) | ⬜ TODO |
+| `/tinh-lai-vay` | S | vibmax | ✅ Done |
+| `/tra-gop` | S | vibmax | ✅ Done |
+| `/lai-the-tin-dung` | S | vibmax | ✅ Done |
+| `/tinh-luong` | S | — (chờ brand savings) | ⬜ TODO |
+| `/tinh-tien-dien` | A | — | ⬜ TODO |
+| `/tinh-tien-nuoc` | A | — | ⬜ TODO |
+| `/chia-tien` | A | — | ⬜ TODO |
+| `/chi-phi-du-lich` | B | — | ⬜ TODO |
+
+> Comparison tables cần ≥2 brand approved để render. Hiện chỉ vibmax approved → mọi
+> tool show single CTA, chưa có bảng so sánh. Comparison sẽ bật tự động khi add
+> brand thứ 2 qua `/admin`.
 
 ### Infrastructure — affiliate
 
 | Hạng mục | Status | Ghi chú |
 |----------|--------|---------|
-| Accesstrade publisher apply | ⬜ TODO | Apply với domain root `chilathu.com` |
-| Tier 1 campaigns | ⬜ TODO | Cake, TNEX, Timo, Finhay, Tikop, Infina |
-| Tier 2 campaigns | ⬜ TODO | TPBank, Shinhan, FE Credit, Home Credit — apply sau 2-4 tuần có traffic proof |
-| Redirect layer `/go/:brand` | ⬜ TODO | Cloudflare Worker + Supabase `affiliate_clicks` table — swap URL builder khi ready |
-| Admin tool (link management) | ⬜ Backlog | Build ở tháng 2+ khi scale theo plan section 7 |
+| Accesstrade publisher apply | ✅ Done | Publisher ID active, campaign VIB App Max đã duyệt |
+| VIB App Max campaign | ✅ Live | URL affiliate + referral code `PAAT_2200776` + interstitial modal |
+| Batch apply campaigns còn lại | ⬜ TODO | iShinhan, Tima, Lotte Finance, VPBank 3T, Cathay, Bảo Minh, VBI + Tier 1 (Cake, TNEX, Timo, Finhay, Tikop, Infina) |
+| Admin tool (link management) | ✅ Live | `/admin` UI + KV + Pages Functions — không cần redeploy khi update config |
+| Redirect layer `/go/:brand` | ⬜ Backlog | Cloudflare Worker + Supabase `affiliate_clicks` table — swap URL builder khi scale cần hard stats |
 
 ---
 
