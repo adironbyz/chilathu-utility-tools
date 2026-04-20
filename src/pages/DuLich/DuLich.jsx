@@ -48,10 +48,7 @@ function fmtFull(n) {
 }
 
 function fmtCompact(n) {
-  if (n >= 1_000_000_000) return (n / 1_000_000_000).toFixed(1).replace(/\.0$/, '') + ' tỷ'
-  if (n >= 1_000_000)     return (n / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'tr'
-  if (n >= 1_000)         return Math.round(n / 1_000) + 'k'
-  return n.toLocaleString('vi-VN') + 'đ'
+  return Math.round(n).toLocaleString('vi-VN') + 'đ'
 }
 
 // ─── Categories ───────────────────────────────────────────────────────────────

@@ -25,12 +25,10 @@ function parseRate(s) {
   return parseFloat((s || '').replace(',', '.')) || 0
 }
 
-// Compact display for table cells
+// Full display for table cells — tiền không làm tròn
 function fmtCompact(n) {
-  if (n <= 0)           return 'Hết nợ'
-  if (n >= 1_000_000_000) return (n / 1_000_000_000).toFixed(1).replace(/\.0$/, '') + ' tỷ'
-  if (n >= 1_000_000)   return (n / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'tr'
-  if (n >= 1_000)       return Math.round(n / 1_000) + 'k'
+  if (n <= 0) return 'Hết nợ'
+  return Math.round(n).toLocaleString('vi-VN') + 'đ'
   return n.toLocaleString('vi-VN') + 'đ'
 }
 
