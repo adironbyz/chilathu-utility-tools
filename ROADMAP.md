@@ -79,16 +79,18 @@
 
 ### Tool integration status
 
-| Tool | Tier | Featured (default) | Plugged in? |
-|------|------|---------|-------------|
-| `/tinh-lai-vay` | S | vibmax | ✅ Done |
-| `/tra-gop` | S | vibmax | ✅ Done |
-| `/lai-the-tin-dung` | S | vibmax | ✅ Done |
-| `/tinh-luong` | S | — (chờ brand savings) | ⬜ TODO |
-| `/tinh-tien-dien` | A | — | ⬜ TODO |
-| `/tinh-tien-nuoc` | A | — | ⬜ TODO |
-| `/chia-tien` | A | — | ⬜ TODO |
-| `/chi-phi-du-lich` | B | — | ⬜ TODO |
+> Brand mapping chi tiết per tool: `AFFILIATE-PER-TOOL-MAP.md`
+
+| Tool | Tier | Featured (default) | Plugged in? | Next brand cần apply |
+|------|------|---------|-------------|----------------------|
+| `/tinh-lai-vay` | S | vibmax | ✅ Done | TPBank, Shinhan, FE, Tima |
+| `/tra-gop` | S | vibmax | ✅ Done | VPBank CC, SPayLater, Home Credit |
+| `/lai-the-tin-dung` | S | vibmax | ✅ Done | TPBank Evo (balance transfer), MoMo Vay |
+| `/tinh-luong` | S | — | ⬜ TODO | **Cake** (featured) + TNEX / Timo / Finhay / Tikop |
+| `/chi-phi-du-lich` | S | — | ⬜ TODO | **Booking / Agoda / Klook / Traveloka** + Wise + Bảo Minh |
+| `/chia-tien` | A | — | ⬜ TODO | **MoMo / ZaloPay** + Cake |
+| `/tinh-tien-dien` | A | — | ⬜ TODO | **MoMo / ZaloPay / VNPay** + FPT Solar lead |
+| `/tinh-tien-nuoc` | A | — | ⬜ TODO | MoMo + Karofi / Kangaroo |
 
 > Comparison tables cần ≥2 brand approved để render. Hiện chỉ vibmax approved → mọi
 > tool show single CTA, chưa có bảng so sánh. Comparison sẽ bật tự động khi add
@@ -103,6 +105,59 @@
 | Batch apply campaigns còn lại | ⬜ TODO | iShinhan, Tima, Lotte Finance, VPBank 3T, Cathay, Bảo Minh, VBI + Tier 1 (Cake, TNEX, Timo, Finhay, Tikop, Infina) |
 | Admin tool (link management) | ✅ Live | `/admin` UI + KV + Pages Functions — không cần redeploy khi update config |
 | Redirect layer `/go/:brand` | ⬜ Backlog | Cloudflare Worker + Supabase `affiliate_clicks` table — swap URL builder khi scale cần hard stats |
+
+---
+
+## Sprint 3 — Affiliate-driven new tools
+
+> Quyết định 2026-04-20: build thêm tool mới để fill category Accesstrade chưa khai thác (MOBILE OFFER, Game, KOC/KOL, Entertainment) + comparison tool re-use Tier 1 brand đã apply.
+> Spec chi tiết per-tool brand mapping: xem `AFFILIATE-PER-TOOL-MAP.md`.
+
+### Tier 1 — High intent + high commission (build trước)
+
+| Tool | Slug | Status | Category Accesstrade | Featured brand kỳ vọng | Ghi chú |
+|------|------|--------|---------------------|------------------------|---------|
+| So sánh TK tiết kiệm | `/so-sanh-tk-tiet-kiem` | ⬜ Spec | Financial & Service | Cake / TNEX / Timo / MB / VPBank | Re-use Tier 1 brand đã apply → ROI nhanh nhất. Input số tiền + kỳ hạn → table lãi suất 10 bank + CTA "Mở TK" |
+| So sánh thẻ tín dụng | `/so-sanh-the-tin-dung` | ⬜ Spec | Financial & Service | TPBank / VPBank / Shinhan / MB / Sacombank | Filter theo income + mục đích (cashback / dặm bay / trả góp 0%) → recommend 2-3 thẻ. Commission 200-500k/thẻ duyệt |
+| Cước data 3G/4G | `/cuoc-data-3g-4g` | ⬜ Spec | **MOBILE OFFER** | Viettel / Vina / Mobi / Wintel / Reddi / iTel | Fill category Accesstrade #1 đang trống. Chọn nhu cầu (data/phút/SMS) → recommend gói + đăng ký SIM/eSIM |
+| Bảo hiểm xe máy/ô tô | `/bao-hiem-xe-may-oto` | ⬜ Spec | Financial & Service | Bảo Minh / PVI / PTI / VBI / Bảo Việt / Liberty | Bắt buộc — intent action ngay. Chọn loại xe + năm SX → list giá + mua online. Commission 50-200k/policy |
+
+### Tier 2 — Mass traffic + cross-sell
+
+| Tool | Slug | Status | Category Accesstrade | Featured brand kỳ vọng | Ghi chú |
+|------|------|--------|---------------------|------------------------|---------|
+| Tính cước Grab/Be/Xanh SM | `/tinh-cuoc-grab-be` | ⬜ Backlog | Online Service / Travel | Grab / Be / Xanh SM / Gojek | Input quãng đường → table giá + deeplink mở app + voucher. Daily intent |
+| Tính TDEE / calo / nước | `/calo-tdee` | ⬜ Backlog | Mobile App + E-Commerce | MyFitnessPal / BetterMe / Lifesum / Centrum / Blackmores | Trend health, mass GenZ. CPI app + CPS thực phẩm chức năng |
+
+### Tier 3 — Niche, high commission (chờ data Tier 1)
+
+| Tool | Slug | Status | Category Accesstrade | Featured brand kỳ vọng | Ghi chú |
+|------|------|--------|---------------------|------------------------|---------|
+| Thuế hộ kinh doanh | `/tinh-thue-ho-kd` | ⬜ Backlog | Online Service | MISA AMIS / Fast / Cyberbiz / Sapo | SME owner intent. Commission cao |
+| Vốn mở cửa hàng | `/tinh-chi-phi-mo-cua-hang` | ⬜ Backlog | Financial & Service + Online Service | KiotViet / Sapo / MISA + vay vốn SME | Cross-sell POS + vay doanh nghiệp |
+| Quyết toán thuế TNCN cuối năm | `/uoc-tinh-thue-tncn-cuoi-nam` | ⬜ Backlog | Online Service + Financial & Service | TaxOnline / eTax mobile / Anpha | Seasonal Q1 hằng năm |
+
+### Tier 4 — Fill category trống (Game / KOC / Entertainment)
+
+| Tool | Slug | Status | Category Accesstrade | Featured brand kỳ vọng | Ghi chú |
+|------|------|--------|---------------------|------------------------|---------|
+| Setup PC stream game | `/tinh-chi-phi-stream-game` | ⬜ Idea | **Game** + E-Commerce | GearVN / Phong Vũ / An Phát / Hà Nội Computer | Fill category Game đang trống |
+| Vốn mở kênh TikTok content | `/chi-phi-mo-kenh-tiktok-content` | ⬜ Idea | **KOC/KOL** | Thiết bị (E-Commerce) + Edumall / Unica | Fill category KOC/KOL |
+| Du toán cuối tuần | `/du-toan-cuoi-tuan` | ⬜ Idea | **Entertainment** + F&B | GrabFood / ShopeeFood / CGV / Lotte | Fill category Entertainment |
+
+### Build order
+
+1. **`/so-sanh-tk-tiet-kiem`** — re-use brand đã apply, ship đầu tiên
+2. **`/so-sanh-the-tin-dung`** — commission cao nhất, intent rõ
+3. **`/cuoc-data-3g-4g`** — fill category MOBILE OFFER, dễ duyệt
+4. **`/bao-hiem-xe-may-oto`** — seasonal-proof, intent bắt buộc
+5. Tier 2-4 evaluate sau khi Tier 1 có GA4 data
+
+### Avoid list
+
+- Game cờ bạc / poker (cấm)
+- Forex / sàn crypto (high reversal + risk)
+- MMO / đào coin (compliance)
 
 ---
 

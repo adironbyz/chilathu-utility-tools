@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Home layout preview — responsive</title>
+<style>
+  :root {
+    --m-surface: #F7F7F5;
+    --m-card: #ffffff;
+    --m-ink: #18181b;
+    --m-ink-secondary: #52525b;
+    --m-muted: #a1a1aa;
+    --m-divider: #f0f0ef;
+    --m-border: #e4e4e7;
+    --m-subtle: #f4f4f5;
+    --m-dash: #ebebeb;
+    --m-green: #48A887;
+    --m-green-dark: #3a8a6e;
+    --m-green-bg: #f0fdfb;
+    --m-green-border: #86e8c6;
+    --m-orange: #c2410c;
+    --m-radius-item: 14px;
+    --m-radius-pill: 20px;
+    --m-dur-micro: 150ms;
+    --m-dur-fast: 200ms;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, sans-serif;
+    background: #e5e5e5;
+    padding: 20px;
+  }
+  .viewport-wrap {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  .viewport {
+    background: var(--m-surface);
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    overflow: hidden;
+    border-radius: 10px;
+  }
+  .viewport-label {
+    background: #333;
+    color: white;
+    font-size: 11px;
+    padding: 6px 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+  }
+  .viewport.mobile { width: 390px; height: 780px; overflow-y: auto; }
+  .viewport.tablet { width: 820px; height: 1000px; overflow-y: auto; }
+  .viewport.desktop { width: 1280px; height: 1000px; overflow-y: auto; }
+
+  /* ─── Replicated Home CSS ─── */
+  .home-page {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--m-surface);
+    background-image:
+      linear-gradient(rgba(0, 0, 0, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.045) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .home-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 32px 20px 16px;
+  }
+  .home-logo {
+    font-family: 'Caveat', cursive;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--m-ink);
+    line-height: 1;
+  }
+  .home-tagline {
+    font-size: 13px;
+    color: var(--m-muted);
+    font-weight: 500;
+  }
+  .home-hero {
+    width: 100%;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 14px 20px;
+  }
+  .home-bills-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--m-green-bg);
+    border: 1.5px solid var(--m-green-border);
+    border-radius: var(--m-radius-item);
+    padding: 14px;
+    cursor: pointer;
+  }
+  .home-bills-left { display: flex; flex-direction: column; gap: 5px; }
+  .home-bills-logo { font-family: 'Caveat', cursive; font-size: 22px; font-weight: 700; }
+  .home-bills-badge {
+    font-size: 9px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--m-green-dark);
+    background: white; border: 1px solid var(--m-green-border);
+    border-radius: 5px; padding: 2px 6px;
+  }
+  .home-bills-body { flex: 1; }
+  .home-bills-name { font-size: 15px; font-weight: 700; color: var(--m-ink); margin-bottom: 2px; }
+  .home-bills-desc { font-size: 12px; color: var(--m-green-dark); line-height: 1.4; }
+
+  .home-content {
+    flex: 1; width: 100%; max-width: 1120px;
+    margin: 0 auto; padding: 0 14px 32px;
+  }
+  .home-filters {
+    display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none;
+    padding: 10px 14px; margin: 0 -14px 16px;
+    background: var(--m-surface); position: sticky; top: 0; z-index: 10;
+  }
+  .home-filters::-webkit-scrollbar { display: none; }
+  .home-filter-chip {
+    flex-shrink: 0; padding: 8px 14px; height: 32px;
+    border-radius: var(--m-radius-pill); background: white;
+    border: 1.5px solid var(--m-border); font-size: 13px; font-weight: 600;
+    color: var(--m-ink-secondary); white-space: nowrap; cursor: pointer;
+  }
+  .home-filter-chip.active {
+    background: var(--m-green); border-color: var(--m-green); color: white;
+  }
+  .home-section { margin-bottom: 24px; }
+  .home-section-label {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--m-muted); margin: 0 0 10px; padding: 0 2px;
+  }
+
+  .home-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
+  .mobile .home-grid { grid-template-columns: 1fr; }
+  .tablet .home-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .desktop .home-grid { grid-template-columns: repeat(4, 1fr); gap: 14px; }
+
+  .home-tool-card {
+    width: 100%; background: white;
+    border: 1.5px solid var(--m-border); border-radius: var(--m-radius-item);
+    padding: 14px 14px 14px 12px; display: flex; align-items: center;
+    gap: 12px; text-align: left; cursor: pointer;
+    transition: all var(--m-dur-micro);
+  }
+  .home-tool-card:hover {
+    border-color: var(--m-green-border); background: var(--m-green-bg);
+    transform: translateY(-1px);
+  }
+  .home-tool-emoji-wrap {
+    width: 44px; height: 44px; border-radius: 12px; border: 1.5px solid;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .home-tool-emoji { font-size: 22px; }
+  .home-tool-body { flex: 1; min-width: 0; }
+  .home-tool-name-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 2px; }
+  .home-tool-name { font-size: 15px; font-weight: 700; color: var(--m-ink); letter-spacing: -0.2px; }
+  .home-tool-badge {
+    font-size: 9px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.04em; border-radius: 4px; padding: 2px 6px; line-height: 1;
+  }
+  .home-tool-badge.popular { color: var(--m-orange); background: rgba(194, 65, 12, 0.08); }
+  .home-tool-badge.new { color: var(--m-green-dark); background: var(--m-green-bg); border: 1px solid var(--m-green-border); padding: 1px 5px; }
+  .home-tool-desc {
+    font-size: 12px; color: var(--m-ink-secondary); line-height: 1.4;
+  }
+  .mobile .home-tool-desc {
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .tablet .home-tool-desc, .desktop .home-tool-desc {
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden; min-height: calc(1.4em * 2);
+  }
+  .home-tool-right { flex-shrink: 0; color: var(--m-green-dark); font-size: 18px; }
+  .home-footer { padding: 20px; text-align: center; font-size: 11px; color: var(--m-muted); }
+</style>
+</head>
+<body>
+
+<div class="viewport-wrap">
+
+  <!-- ─── MOBILE 390px ─── -->
+  <div>
+    <div class="viewport-label">Mobile · 390×780</div>
+    <div class="viewport mobile">
+      <div class="home-page">
+        <div class="home-header">
+          <div class="home-logo">Chilàthu.</div>
+          <div class="home-tagline">Bộ công cụ tài chính cá nhân</div>
+        </div>
+        <div class="home-hero">
+          <div class="home-bills-card">
+            <div class="home-bills-left">
+              <div class="home-bills-logo">Bills.</div>
+              <div class="home-bills-badge">Ứng dụng</div>
+            </div>
+            <div class="home-bills-body">
+              <div class="home-bills-name">Sổ thu chi Chilathu</div>
+              <div class="home-bills-desc">Ghi chép chi tiêu hàng ngày bằng 1 dòng tin nhắn</div>
+            </div>
+            <div>↗</div>
+          </div>
+        </div>
+        <div class="home-content">
+          <div class="home-filters">
+            <div class="home-filter-chip active">Tất cả</div>
+            <div class="home-filter-chip">Tài chính</div>
+            <div class="home-filter-chip">Hóa đơn</div>
+            <div class="home-filter-chip">Du lịch</div>
+          </div>
+          <div id="mobile-body"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── TABLET 820px ─── -->
+  <div>
+    <div class="viewport-label">Tablet · 820×1000 (grid 2 cols)</div>
+    <div class="viewport tablet">
+      <div class="home-page">
+        <div class="home-header">
+          <div class="home-logo">Chilàthu.</div>
+          <div class="home-tagline">Bộ công cụ tài chính cá nhân</div>
+        </div>
+        <div class="home-hero" style="max-width:720px">
+          <div class="home-bills-card" style="padding:16px 18px">
+            <div class="home-bills-left">
+              <div class="home-bills-logo">Bills.</div>
+              <div class="home-bills-badge">Ứng dụng</div>
+            </div>
+            <div class="home-bills-body">
+              <div class="home-bills-name" style="font-size:16px">Sổ thu chi Chilathu</div>
+              <div class="home-bills-desc" style="font-size:13px">Ghi chép chi tiêu hàng ngày bằng 1 dòng tin nhắn</div>
+            </div>
+            <div>↗</div>
+          </div>
+        </div>
+        <div class="home-content">
+          <div class="home-filters">
+            <div class="home-filter-chip active">Tất cả</div>
+            <div class="home-filter-chip">Tài chính</div>
+            <div class="home-filter-chip">Hóa đơn</div>
+            <div class="home-filter-chip">Du lịch</div>
+          </div>
+          <div id="tablet-body"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── DESKTOP 1280px ─── -->
+  <div>
+    <div class="viewport-label">Desktop · 1280×1000 (grid 4 cols)</div>
+    <div class="viewport desktop">
+      <div class="home-page">
+        <div class="home-header">
+          <div class="home-logo">Chilàthu.</div>
+          <div class="home-tagline">Bộ công cụ tài chính cá nhân</div>
+        </div>
+        <div class="home-hero" style="max-width:720px">
+          <div class="home-bills-card" style="padding:16px 18px">
+            <div class="home-bills-left">
+              <div class="home-bills-logo">Bills.</div>
+              <div class="home-bills-badge">Ứng dụng</div>
+            </div>
+            <div class="home-bills-body">
+              <div class="home-bills-name" style="font-size:16px">Sổ thu chi Chilathu</div>
+              <div class="home-bills-desc" style="font-size:13px">Ghi chép chi tiêu hàng ngày bằng 1 dòng tin nhắn</div>
+            </div>
+            <div>↗</div>
+          </div>
+        </div>
+        <div class="home-content">
+          <div class="home-filters">
+            <div class="home-filter-chip active">Tất cả</div>
+            <div class="home-filter-chip">Tài chính</div>
+            <div class="home-filter-chip">Hóa đơn</div>
+            <div class="home-filter-chip">Du lịch</div>
+          </div>
+          <div id="desktop-body"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const TOOLS = [
+  { s:'tinh-luong',       cat:'finance', pop:true, e:'💰', l:'Tính lương Net', d:'Gross → Net, khấu trừ BHXH & thuế TNCN lũy tiến', c:'#dcfce7', cb:'#86efac' },
+  { s:'tinh-lai-vay',     cat:'finance', pop:true, e:'🏦', l:'Tính lãi vay ngân hàng', d:'Vay nhanh, mua nhà, mua xe, vay tiêu dùng', c:'#ede9fe', cb:'#c4b5fd' },
+  { s:'tra-gop',          cat:'finance', e:'📅', l:'Tính trả góp', d:'0% không phí, 0% có phí chuyển đổi, có lãi suất', c:'#fce7f3', cb:'#f9a8d4' },
+  { s:'lai-the-tin-dung', cat:'finance', e:'💳', l:'Lãi thẻ tín dụng quá hạn', d:'Tối thiểu, tự nhập, hoặc không trả', c:'#fef2f2', cb:'#fca5a5' },
+  { s:'tinh-tien-dien',   cat:'bills',   pop:true, e:'⚡', l:'Tính tiền điện', d:'Bậc thang EVN, đủ 5 nhóm hộ dùng điện', c:'#fef9c3', cb:'#fde047' },
+  { s:'tinh-tien-nuoc',   cat:'bills',   e:'💧', l:'Tính tiền nước', d:'Bậc thang nước sinh hoạt, đủ 63 tỉnh thành', c:'#e0f2fe', cb:'#7dd3fc' },
+  { s:'chia-tien',        cat:'travel',  e:'👥', l:'Chia tiền nhóm', d:'Chia đều hoặc theo món — tính ai chuyển cho ai', c:'#ffedd5', cb:'#fdba74' },
+  { s:'chi-phi-du-lich',  cat:'travel',  e:'✈️', l:'Chi phí du lịch', d:'Ngân sách theo hạng mục, đổi ngoại tệ, chia đầu người', c:'#fff7ed', cb:'#fdba74' },
+];
+const CATS = [
+  { id:'finance', label:'Tài chính cá nhân' },
+  { id:'bills',   label:'Hóa đơn & tiện ích' },
+  { id:'travel',  label:'Đi chơi & du lịch' },
+];
+
+function renderGrouped(containerId) {
+  const html = CATS.map(cat => {
+    const tools = TOOLS.filter(t => t.cat === cat.id);
+    const cards = tools.map(t => `
+      <div class="home-tool-card">
+        <div class="home-tool-emoji-wrap" style="background:${t.c};border-color:${t.cb}">
+          <span class="home-tool-emoji">${t.e}</span>
+        </div>
+        <div class="home-tool-body">
+          <div class="home-tool-name-row">
+            <span class="home-tool-name">${t.l}</span>
+            ${t.pop ? '<span class="home-tool-badge popular">Phổ biến</span>' : ''}
+            ${t.isNew ? '<span class="home-tool-badge new">Mới</span>' : ''}
+          </div>
+          <div class="home-tool-desc">${t.d}</div>
+        </div>
+        <div class="home-tool-right">›</div>
+      </div>
+    `).join('');
+    return `
+      <section class="home-section">
+        <h2 class="home-section-label">${cat.label}</h2>
+        <div class="home-grid">${cards}</div>
+      </section>
+    `;
+  }).join('');
+  document.getElementById(containerId).innerHTML = html;
+}
+
+renderGrouped('mobile-body');
+renderGrouped('tablet-body');
+renderGrouped('desktop-body');
+</script>
+</body>
+</html>
