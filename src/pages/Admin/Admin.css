@@ -352,18 +352,48 @@
   justify-content: flex-end;
 }
 
-/* ─── Add brand row ────────────────────────────────────────────────────── */
+/* ─── Add brand row (sticky top of brands tab) ─────────────────────────── */
+/* Sits under the header + tabs (header ~65px + tabs ~45px = 110px).       */
 .ad-add-brand {
   display: flex;
   gap: 8px;
-  padding: 16px;
+  padding: 12px 14px;
+  background: var(--m-card);
+  border: 1px solid var(--m-border);
+  border-radius: var(--m-radius-item);
+  position: sticky;
+  top: 118px;
+  z-index: 8;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.ad-add-brand input {
+  flex: 1;
+  min-width: 0;
+}
+
+.ad-btn-compact {
+  padding: 0 14px;
+  height: 38px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+/* Empty state when no brands yet */
+.ad-brands-empty {
+  padding: 28px 20px;
+  text-align: center;
+  color: var(--m-muted);
+  font-size: 13px;
+  line-height: 1.5;
   background: var(--m-card);
   border: 1.5px dashed var(--m-border);
   border-radius: var(--m-radius-item);
 }
 
-.ad-add-brand input {
-  flex: 1;
+.ad-brands-empty strong {
+  color: var(--m-ink);
+  font-weight: 600;
 }
 
 /* ─── Tools list ───────────────────────────────────────────────────────── */

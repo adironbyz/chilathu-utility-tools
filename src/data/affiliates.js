@@ -41,6 +41,8 @@
 
 const DEFAULT_BRANDS = {
   // ─── Approved (URL thật, ship được) ─────────────────────────────────────
+  // Brand duy nhất có URL affiliate thật. Các brand khác sẽ add qua /admin
+  // khi Accesstrade duyệt campaign.
   vibmax: {
     slug: 'vibmax',
     name: 'VIB App Max',
@@ -53,139 +55,50 @@ const DEFAULT_BRANDS = {
     approved: true,
     url: 'https://go.isclix.com/deep_link/v6/6961769419275243212/6873138885445764645?sub4=oneatweb&url_enc=aHR0cHM6Ly9tYXh2aWIuZ28ubGluay8%3D',
   },
-
-  // ─── Pending (URL placeholder → brand homepage, chưa track được) ────────
-  cake: {
-    slug: 'cake',
-    name: 'Cake by VPBank',
-    initial: 'C',
-    color: '#E91E63',
-    tagline: 'Ngân hàng số miễn phí, mở tài khoản online 2 phút',
-    metric: 'Lãi suất tiết kiệm 5.6%/năm',
-    url: 'https://cake.vn/',
-  },
-  tnex: {
-    slug: 'tnex',
-    name: 'TNEX',
-    initial: 'T',
-    color: '#7B1FA2',
-    tagline: 'Tài khoản số miễn phí suốt đời',
-    metric: 'Miễn phí chuyển khoản mọi ngân hàng',
-    url: 'https://tnex.com.vn/',
-  },
-  timo: {
-    slug: 'timo',
-    name: 'Timo Plus',
-    initial: 'Ti',
-    color: '#2196F3',
-    tagline: 'Tài khoản số + thẻ ghi nợ miễn phí',
-    metric: 'Hoàn tiền 5% khi chi tiêu',
-    url: 'https://timo.vn/',
-  },
-  finhay: {
-    slug: 'finhay',
-    name: 'Finhay',
-    initial: 'F',
-    color: '#FF5722',
-    tagline: 'Đầu tư tự động từ 50.000đ',
-    metric: 'Lợi nhuận kỳ vọng 7–12%/năm',
-    url: 'https://finhay.com.vn/',
-  },
-  tikop: {
-    slug: 'tikop',
-    name: 'Tikop',
-    initial: 'Tk',
-    color: '#009688',
-    tagline: 'Tích lũy linh hoạt, rút bất cứ lúc nào',
-    metric: 'Lãi suất 7.5%/năm',
-    url: 'https://tikop.vn/',
-  },
-  infina: {
-    slug: 'infina',
-    name: 'Infina',
-    initial: 'I',
-    color: '#3F51B5',
-    tagline: 'Chứng chỉ quỹ + gửi tích lũy',
-    metric: 'Lãi suất từ 6.8%/năm',
-    url: 'https://infina.vn/',
-  },
-  tpbank: {
-    slug: 'tpbank',
-    name: 'TPBank',
-    initial: 'TP',
-    color: '#9C27B0',
-    tagline: 'Thẻ tín dụng miễn phí thường niên',
-    metric: 'Hoàn tiền tới 10%',
-    url: 'https://tpb.vn/',
-  },
-  shinhan: {
-    slug: 'shinhan',
-    name: 'Shinhan Bank',
-    initial: 'S',
-    color: '#0066B3',
-    tagline: 'Thẻ tín dụng cho người lương cao',
-    metric: 'Hoàn tiền không giới hạn',
-    url: 'https://shinhan.com.vn/',
-  },
-  fecredit: {
-    slug: 'fecredit',
-    name: 'FE Credit',
-    initial: 'FE',
-    color: '#E53935',
-    tagline: 'Vay tiêu dùng nhanh, duyệt online',
-    metric: 'Lãi suất từ 18%/năm',
-    url: 'https://fecredit.com.vn/',
-  },
-  homecredit: {
-    slug: 'homecredit',
-    name: 'Home Credit',
-    initial: 'HC',
-    color: '#D32F2F',
-    tagline: 'Vay tiền mặt + trả góp điện máy',
-    metric: 'Giải ngân trong ngày',
-    url: 'https://homecredit.vn/',
-  },
 }
 
 // Mapping cho 8 tool live trên tienich.chilathu.com.
 // Mỗi tool có:
 //   - featured: brand cho single contextual CTA (1 brand)
-//   - comparison: brand cho bảng so sánh (3–5 brand)
+//   - comparison: brand cho bảng so sánh (≥2 brand để render)
+//
+// Hiện chỉ vibmax approved → chỉ tool loan/credit có featured. Comparison
+// rỗng khắp nơi (cần ≥2 approved mới render) — sẽ fill dần khi thêm brand.
 const DEFAULT_TOOL_AFFILIATES = {
   // Tier S — finance intent mạnh
   'tinh-luong': {
-    featured: 'cake',
-    comparison: ['cake', 'tnex', 'timo', 'finhay', 'tikop'],
+    featured: '',
+    comparison: [],
   },
   'tinh-lai-vay': {
     featured: 'vibmax',
-    comparison: ['vibmax', 'fecredit', 'homecredit', 'cake', 'tpbank'],
+    comparison: ['vibmax'],
   },
   'tra-gop': {
     featured: 'vibmax',
-    comparison: ['vibmax', 'homecredit', 'fecredit', 'tpbank'],
+    comparison: ['vibmax'],
   },
   'lai-the-tin-dung': {
     featured: 'vibmax',
-    comparison: ['tpbank', 'vibmax', 'shinhan', 'cake'],
+    comparison: ['vibmax'],
   },
   // Tier A — utility intent gián tiếp
   'tinh-tien-dien': {
-    featured: 'cake',
-    comparison: ['cake', 'tnex', 'timo'],
+    featured: '',
+    comparison: [],
   },
   'tinh-tien-nuoc': {
-    featured: 'tnex',
-    comparison: ['tnex', 'cake', 'timo'],
+    featured: '',
+    comparison: [],
   },
   'chia-tien': {
-    featured: 'tnex',
-    comparison: ['tnex', 'timo', 'cake'],
+    featured: '',
+    comparison: [],
   },
   // Tier B — aspirational
   'chi-phi-du-lich': {
-    featured: 'tpbank',
-    comparison: ['tpbank', 'shinhan', 'cake'],
+    featured: '',
+    comparison: [],
   },
 }
 

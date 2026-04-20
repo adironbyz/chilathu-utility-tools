@@ -513,29 +513,35 @@ function Editor({ onLogout }) {
       <main className="ad-main">
         {activeTab === 'brands' && (
           <div className="ad-brands">
-            {brandsList.map((b) => (
-              <BrandCard
-                key={b.slug}
-                brand={b}
-                onChange={(next) => updateBrand(b.slug, next)}
-                onDelete={() => deleteBrand(b.slug)}
-                canDelete={!brandInUse(b.slug)}
-              />
-            ))}
-
             <div className="ad-add-brand">
               <input
                 type="text"
-                placeholder="Brand slug mới (vd: mbbank)"
+                placeholder="Brand slug mới (vd: mbbank, vpbank)"
                 value={newBrandSlug}
                 onChange={(e) => setNewBrandSlug(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && addBrand()}
               />
-              <button className="ad-btn-ghost" onClick={addBrand}>
+              <button className="ad-btn-primary ad-btn-compact" onClick={addBrand}>
                 <HugeiconsIcon icon={Add01Icon} size={14} strokeWidth={2} />
                 Thêm brand
               </button>
             </div>
+
+            {brandsList.length === 0 ? (
+              <div className="ad-brands-empty">
+                Chưa có brand nào — gõ slug bên trên rồi bấm <strong>Thêm brand</strong> để bắt đầu.
+              </div>
+            ) : (
+              brandsList.map((b) => (
+                <BrandCard
+                  key={b.slug}
+                  brand={b}
+                  onChange={(next) => updateBrand(b.slug, next)}
+                  onDelete={() => deleteBrand(b.slug)}
+                  canDelete={!brandInUse(b.slug)}
+                />
+              ))
+            )}
           </div>
         )}
 
