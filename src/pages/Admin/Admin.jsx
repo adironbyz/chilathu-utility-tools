@@ -20,7 +20,6 @@ import {
   Cancel01Icon,
   Add01Icon,
   Delete01Icon,
-  RefreshIcon,
   Logout01Icon,
   CheckmarkCircle01Icon,
   AlertCircleIcon,
@@ -169,7 +168,7 @@ function BrandSidebarRow({ brand, selected, onSelect }) {
   )
 }
 
-function BrandCard({ brand, onChange, onDelete, canDelete }) {
+function BrandCard({ brand, onChange, onDelete }) {
   const update = (patch) => onChange({ ...brand, ...patch })
 
   return (
@@ -293,12 +292,7 @@ function BrandCard({ brand, onChange, onDelete, canDelete }) {
           type="button"
           className="ad-btn-danger"
           onClick={onDelete}
-          disabled={!canDelete}
-          title={
-            canDelete
-              ? 'Xoá brand'
-              : 'Brand đang dùng trong tool mapping — gỡ khỏi mapping trước'
-          }
+          title="Xoá brand (tự động gỡ khỏi tool mapping nếu có)"
         >
           <HugeiconsIcon icon={Delete01Icon} size={14} strokeWidth={2} />
           Xoá brand
@@ -414,13 +408,13 @@ function Editor({ onLogout }) {
     }
   }, [config, selectedBrandSlug])
 
-  // Check if a brand is referenced by any tool mapping — prevent delete.
-  const brandInUse = useCallback(
+  // List tools that reference this brand — used để warn trước khi cascade delete.
+  const toolsUsingBrand = useCallback(
     (slug) => {
-      if (!config) return false
-      return Object.values(config.toolAffiliates).some(
-        (m) => m.featured === slug || m.comparison.includes(slug)
-      )
+      if (!config) return []
+      return Object.entries(config.toolAffiliates)
+        .filter(([_, m]) => m.featured === slug || m.comparison.includes(slug))
+        .map(([tool]) => tool)
     },
     [config]
   )
@@ -434,11 +428,31 @@ function Editor({ onLogout }) {
   const updateBrand = (slug, next) => {
     setConfig((c) => ({ ...c, brands: { ...c.brands, [slug]: next } }))
   }
+  // Cascade delete: xoá brand + tự động gỡ slug khỏi mọi tool mapping
+  // (featured + comparison). Trước đây block delete nếu brand còn trong
+  // mapping — bắt user đi từng tab tools untick, quá phiền. Giờ show
+  // warning liệt kê tool bị ảnh hưởng rồi xử lý trong 1 click.
   const deleteBrand = (slug) => {
-    if (!confirm(`Xoá brand "${slug}"?`)) return
+    const affected = toolsUsingBrand(slug)
+    const msg = affected.length
+      ? `Xoá brand "${slug}"?\n\nĐang dùng trong ${affected.length} tool:\n${affected
+          .map((t) => `• /${t}`)
+          .join('\n')}\n\nSẽ tự động gỡ khỏi các mapping trên.`
+      : `Xoá brand "${slug}"?`
+    if (!confirm(msg)) return
     setConfig((c) => {
       const { [slug]: _, ...rest } = c.brands
-      return { ...c, brands: rest }
+      const cleanedMappings = Object.fromEntries(
+        Object.entries(c.toolAffiliates).map(([tool, m]) => [
+          tool,
+          {
+            ...m,
+            featured: m.featured === slug ? '' : m.featured,
+            comparison: m.comparison.filter((s) => s !== slug),
+          },
+        ])
+      )
+      return { ...c, brands: rest, toolAffiliates: cleanedMappings }
     })
   }
   const addBrand = () => {
@@ -475,13 +489,6 @@ function Editor({ onLogout }) {
     }
   }
 
-  const handleResetDefaults = () => {
-    if (!confirm('Reset config về defaults bundled trong code? Thay đổi chưa lưu sẽ mất.')) return
-    const def = getDefaultAffiliateConfig()
-    setConfig(def)
-    showToast('ok', 'Đã reset về defaults (chưa save)')
-  }
-
   const handleDiscard = () => {
     if (!dirty) return
     if (!confirm('Huỷ thay đổi chưa lưu?')) return
@@ -514,14 +521,6 @@ function Editor({ onLogout }) {
           >
             <HugeiconsIcon icon={HelpCircleIcon} size={14} strokeWidth={2} />
             Hướng dẫn
-          </button>
-          <button
-            className="ad-btn-ghost"
-            onClick={handleResetDefaults}
-            title="Reset config về mặc định"
-          >
-            <HugeiconsIcon icon={RefreshIcon} size={14} strokeWidth={2} />
-            Reset defaults
           </button>
           <button className="ad-btn-ghost" onClick={handleLogout}>
             <HugeiconsIcon icon={Logout01Icon} size={14} strokeWidth={2} />
@@ -591,7 +590,6 @@ function Editor({ onLogout }) {
                   brand={config.brands[selectedBrandSlug]}
                   onChange={(next) => updateBrand(selectedBrandSlug, next)}
                   onDelete={() => deleteBrand(selectedBrandSlug)}
-                  canDelete={!brandInUse(selectedBrandSlug)}
                 />
               ) : (
                 <div className="ad-brands-empty-editor">

@@ -294,16 +294,12 @@
 }
 
 /* ─── App card variant — flagship bills-app ─────────────────────────────────
-   Cùng shape với tool card, nhưng nude/paper-warm bg + <a> tag (link external).
-   Full-width (span cả row) để nổi bật như 1 entry đặc biệt, không chia đôi
-   với card trống cạnh bên ở desktop/tablet.
-
-   NOTE: #faf3e3 là nude paper tone — khớp tông notebook hơn green-bg.
-   DS extension candidate: đề xuất thêm token `--m-paper-warm` vào notebook DS.
+   White bg + warm beige border. Khác biệt với tool card thường qua border tint
+   (beige thay vì gray) + full-width, không dùng bg màu để tránh fight notebook.
 ─────────────────────────────────────────────────────────────────────────── */
 .home-app-card {
-  background: #faf3e3;
-  border-color: var(--m-green-border);
+  background: var(--m-card);
+  border-color: #d9c9a8;
   text-decoration: none;
   grid-column: 1 / -1;
 }
@@ -319,15 +315,15 @@
 }
 
 .home-app-card:active {
-  background: #f4ead3;
-  border-color: var(--m-green);
+  background: var(--m-subtle);
+  border-color: #c9b894;
 }
 
 @media (hover: hover) {
   .home-app-card:hover {
-    background: #faf3e3;
-    border-color: var(--m-green);
-    box-shadow: 0 4px 12px rgba(72, 168, 135, 0.18), 0 2px 4px rgba(72, 168, 135, 0.10);
+    background: var(--m-card);
+    border-color: #c9b894;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.04);
   }
 }
 
