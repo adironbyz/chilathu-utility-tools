@@ -5,6 +5,8 @@ import { Logo } from '../../components/Logo.jsx'
 import SEO from '../../components/SEO.jsx'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { DashboardSquare01Icon, Link01Icon, LinkSquare01Icon, UserIcon } from '@hugeicons/core-free-icons'
+import { AffiliateBlock } from '../../components/affiliate/index.js'
+import '../../components/affiliate/Affiliate.css'
 import './TinhLuong.css'
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -383,6 +385,20 @@ export default function TinhLuong() {
             📌 Giảm trừ bản thân 15,5 triệu/tháng, người phụ thuộc 6,2 triệu/tháng (từ 1/1/2026).
             📌 Biểu thuế TNCN 5 bậc (từ 1/1/2026). TNTT = (gross + bonus) − BH − trợ cấp − giảm trừ bản thân − người phụ thuộc. Trợ cấp và bonus không tính cơ sở BHXH.
           </div>
+        )}
+
+        {/* Affiliate */}
+        {result && (
+          <AffiliateBlock
+            tool="tinh-luong"
+            cta={{
+              benefit: 'Giữ lương sinh lãi thay vì nằm không',
+              contextLine: `Để dành 20% lương = ${formatVND(Math.round(result.net * 0.2))} tại`,
+            }}
+            customMetrics={{
+              cake: `Sinh ~${formatVND(Math.round(result.net * 0.2 * 0.056))}/năm`,
+            }}
+          />
         )}
 
         {/* Soft CTA */}

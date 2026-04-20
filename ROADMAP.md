@@ -27,7 +27,7 @@
 |------|------|--------|---------|
 | Tính tiền điện EVN | `/tinh-tien-dien` | ✅ Live | Sinh hoạt + TOU (kinh doanh/sản xuất/hành chính). Nông nghiệp pending data. Bug bậc 1 (min:0→1) đã fix. |
 | Tính lương NET/GROSS | `/tinh-luong` | ✅ Live | Gross → Net, BHXH & thuế TNCN lũy tiến |
-| Tính lãi vay | `/tinh-lai-vay` | ✅ Live | 4 mode theo intent: Vay nhanh (lãi đơn, %/tháng) / Mua nhà (dư nợ giảm dần + lãi hỗn hợp cố định→thả nổi) / Mua xe / Vay tiêu dùng. Bảng lịch trả nợ, expand nếu >24 tháng. |
+| Tính lãi vay | `/tinh-lai-vay` | ✅ Live | 4 mode theo intent: Vay nhanh (lãi đơn, %/tháng) / Mua nhà (dư nợ giảm dần + lãi hỗn hợp cố định→thả nổi) / Mua xe / Vay tiêu dùng. Bảng lịch trả nợ, expand nếu >24 tháng. Fix 2026-04-20: bảng hiển thị full number thay vì rounding (4.166.667đ thay vì 4.2tr). |
 | Chia tiền nhóm | `/chia-tien` | ✅ Live | 2 mode: Chia đều (total ÷ N) / Theo món (thêm thành viên, ghi chi tiêu, ai trả, ai dùng → tính settlement tối giản). Copy kết quả as text. |
 
 ---
@@ -37,9 +37,9 @@
 | Tool | Slug | Status | Ghi chú |
 |------|------|--------|---------|
 | Tính tiền nước | `/tinh-tien-nuoc` | ✅ Live | Bậc thang sinh hoạt, đủ 63 tỉnh thành |
-| Tính trả góp | `/tra-gop` | ✅ Live | 3 mode: 0% không phí / 0% có phí chuyển đổi (hiện lãi suất thực tế) / Có lãi suất dư nợ giảm dần. Bảng lịch thanh toán. |
-| Lãi thẻ tín dụng | `/lai-the-tin-dung` | ✅ Live | Dư nợ + lãi/tháng. 3 mode: không trả / tối thiểu 5% / tự nhập. Bảng tháng chi tiết. |
-| Chi phí du lịch | `/chi-phi-du-lich` | ✅ Live | Thêm chi phí theo 7 hạng mục (vé, lưu trú, ăn, đi lại, vui chơi, mua sắm, khác). Đổi ngoại tệ (USD/THB/JPY/KRW/EUR/SGD) với tỷ giá tuỳ chỉnh. Tổng kết: per person + biểu đồ % theo category. Copy tổng kết. |
+| Tính trả góp | `/tra-gop` | ✅ Live | 3 mode: 0% không phí / 0% có phí chuyển đổi (hiện lãi suất thực tế) / Có lãi suất dư nợ giảm dần. Bảng lịch thanh toán. Fix 2026-04-20: full number display. |
+| Lãi thẻ tín dụng | `/lai-the-tin-dung` | ✅ Live | Dư nợ + lãi/tháng. 3 mode: không trả / tối thiểu 5% / tự nhập. Bảng tháng chi tiết. Fix 2026-04-20: full number display. |
+| Chi phí du lịch | `/chi-phi-du-lich` | ✅ Live | Thêm chi phí theo 7 hạng mục (vé, lưu trú, ăn, đi lại, vui chơi, mua sắm, khác). Đổi ngoại tệ (USD/THB/JPY/KRW/EUR/SGD) với tỷ giá tuỳ chỉnh. Tổng kết: per person + biểu đồ % theo category. Copy tổng kết. Fix 2026-04-20: full number display. |
 
 ---
 
@@ -86,7 +86,7 @@
 | `/tinh-lai-vay` | S | vibmax | ✅ Done | TPBank, Shinhan, FE, Tima |
 | `/tra-gop` | S | vibmax | ✅ Done | VPBank CC, SPayLater, Home Credit |
 | `/lai-the-tin-dung` | S | vibmax | ✅ Done | TPBank Evo (balance transfer), MoMo Vay |
-| `/tinh-luong` | S | — | ⬜ TODO | **Cake** (featured) + TNEX / Timo / Finhay / Tikop |
+| `/tinh-luong` | S | cake | ✅ Done | Cake (featured) + TNEX / Timo / Finhay / Tikop. contextLine: "Gửi {net} tại". customMetrics: lãi ~5,6%/năm. |
 | `/chi-phi-du-lich` | S | — | ⬜ TODO | **Booking / Agoda / Klook / Traveloka** + Wise + Bảo Minh |
 | `/chia-tien` | A | — | ⬜ TODO | **MoMo / ZaloPay** + Cake |
 | `/tinh-tien-dien` | A | — | ⬜ TODO | **MoMo / ZaloPay / VNPay** + FPT Solar lead |

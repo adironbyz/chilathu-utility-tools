@@ -9,6 +9,7 @@ import TinhLaiVay from './pages/TinhLaiVay/TinhLaiVay.jsx'
 import TraGop from './pages/TraGop/TraGop.jsx'
 import ChiaTien from './pages/ChiaTien/ChiaTien.jsx'
 import DuLich from './pages/DuLich/DuLich.jsx'
+import SoSanhLaiSuat from './pages/SoSanhLaiSuat/SoSanhLaiSuat.jsx'
 import Admin from './pages/Admin/Admin.jsx'
 import { loadAffiliateConfig } from './data/affiliates.js'
 
@@ -45,6 +46,7 @@ export default function App() {
         <Route path="/tra-gop" element={<TraGop />} />
         <Route path="/chia-tien" element={<ChiaTien />} />
         <Route path="/chi-phi-du-lich" element={<DuLich />} />
+        <Route path="/so-sanh-lai-suat" element={<SoSanhLaiSuat />} />
         <Route path="/admin" element={<Admin />} />
       </Routes>
     </BrowserRouter>

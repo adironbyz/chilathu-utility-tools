@@ -1,0 +1,552 @@
+/* ─── Shell ─── */
+.ssl-page {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 0 80px;
+}
+
+/* ─── Header ─── */
+.ssl-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  height: 52px;
+  background: var(--m-surface);
+  border-bottom: 1px solid var(--m-border);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+.ssl-menu-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--m-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--m-ink-secondary);
+  background: transparent;
+  transition: background var(--m-dur-micro);
+  flex-shrink: 0;
+}
+.ssl-menu-btn:active { background: var(--m-subtle); }
+
+/* ─── Content ─── */
+.ssl-content {
+  width: 100%;
+  max-width: 560px;
+  padding: 16px 14px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ssl-page-title {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--m-ink);
+  letter-spacing: -0.5px;
+  line-height: 1.15;
+  padding: 4px 2px 0;
+}
+
+/* ─── Card ─── */
+.ssl-card {
+  background: var(--m-card);
+  border-radius: var(--m-radius-item);
+  border: 1px solid var(--m-border);
+  overflow: hidden;
+}
+
+.ssl-card-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--m-muted);
+  padding: 14px 14px 0;
+}
+
+/* ─── Inputs ─── */
+.ssl-inputs {
+  padding: 10px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ssl-input-row {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.ssl-input-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--m-ink-secondary);
+  letter-spacing: 0.01em;
+}
+
+.ssl-input-field {
+  display: flex;
+  align-items: center;
+  background: var(--m-subtle);
+  border: 1px solid var(--m-border);
+  border-radius: var(--m-radius-md);
+  padding: 10px 12px;
+  gap: 6px;
+  transition: border-color var(--m-dur-micro);
+}
+.ssl-input-field:focus-within {
+  border-color: var(--m-green);
+  background: var(--m-card);
+}
+
+.ssl-input-field input {
+  flex: 1;
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--m-ink);
+  background: transparent;
+  border: none;
+  outline: none;
+  min-width: 0;
+}
+.ssl-input-field input::placeholder { color: var(--m-muted); font-weight: 400; }
+
+.ssl-input-unit {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--m-muted);
+  flex-shrink: 0;
+}
+
+/* ─── Chips ─── */
+.ssl-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ssl-chip {
+  height: 30px;
+  padding: 0 12px;
+  border-radius: var(--m-radius-pill);
+  border: 1px solid var(--m-border);
+  background: var(--m-card);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--m-ink-secondary);
+  transition: all var(--m-dur-micro);
+  flex-shrink: 0;
+}
+.ssl-chip:active { background: var(--m-subtle); }
+.ssl-chip.active {
+  background: var(--m-green-bg);
+  border-color: var(--m-green-border);
+  color: var(--m-green);
+  font-weight: 600;
+}
+
+.ssl-chips--term { flex-wrap: nowrap; overflow-x: auto; }
+.ssl-chip--term { flex-shrink: 0; }
+
+/* ─── Online toggle row ─── */
+.ssl-online-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--m-radius-md);
+  border: 1px solid var(--m-border);
+  background: var(--m-subtle);
+  cursor: pointer;
+  user-select: none;
+  transition: background var(--m-dur-micro);
+}
+.ssl-online-row:active { background: var(--m-border); }
+
+.ssl-online-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ssl-online-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--m-ink);
+}
+
+.ssl-online-desc {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--m-muted);
+}
+
+/* iOS-style toggle track + thumb */
+.ssl-toggle-track {
+  width: 44px;
+  height: 26px;
+  border-radius: 13px;
+  background: var(--m-muted);
+  flex-shrink: 0;
+  position: relative;
+  transition: background var(--m-dur-fast) var(--m-ease-out);
+}
+.ssl-toggle-track.on { background: var(--m-green); }
+
+.ssl-toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+  transition: transform var(--m-dur-fast) var(--m-ease-spring);
+}
+.ssl-toggle-track.on .ssl-toggle-thumb {
+  transform: translateX(18px);
+}
+
+/* ─── Filter bar ─── */
+.ssl-filter-row {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+}
+
+.ssl-filter-chip {
+  height: 32px;
+  padding: 0 14px;
+  border-radius: var(--m-radius-pill);
+  border: 1px solid var(--m-border);
+  background: var(--m-card);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--m-ink-secondary);
+  flex-shrink: 0;
+  transition: all var(--m-dur-micro);
+}
+.ssl-filter-chip:active { background: var(--m-subtle); }
+.ssl-filter-chip.active {
+  background: var(--m-ink);
+  border-color: var(--m-ink);
+  color: var(--m-card);
+  font-weight: 600;
+}
+
+/* ─── Result card ─── */
+.ssl-result { overflow: visible; }
+
+.ssl-result-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px 0;
+}
+
+.ssl-result-count {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--m-muted);
+}
+
+.ssl-result-top {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--m-ink-secondary);
+}
+.ssl-result-top strong {
+  color: var(--m-ink);
+  font-weight: 700;
+}
+
+/* ─── Hero (top bank summary) ─── */
+.ssl-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 10px 14px;
+  padding: 12px 14px;
+  background: var(--m-subtle);
+  border: 1px solid var(--m-border);
+  border-radius: var(--m-radius-md);
+}
+
+.ssl-hero-bank {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ssl-hero-rank { font-size: 20px; flex-shrink: 0; }
+
+.ssl-hero-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--m-ink);
+}
+
+.ssl-hero-meta {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--m-muted);
+  margin-top: 2px;
+}
+
+.ssl-hero-nums { text-align: right; flex-shrink: 0; }
+
+.ssl-hero-interest {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--m-ink);
+  letter-spacing: -0.2px;
+}
+
+.ssl-hero-total {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--m-ink-secondary);
+  margin-top: 2px;
+}
+
+/* ─── Table ─── */
+.ssl-table {
+  display: flex;
+  flex-direction: column;
+  padding: 0 0 4px;
+  margin-top: 24px;
+}
+
+.ssl-thead {
+  display: flex;
+  align-items: center;
+  padding: 8px 14px 7px;
+  border-bottom: 1px solid var(--m-divider);
+  gap: 0;
+}
+
+.ssl-th-rank     { width: 36px; flex-shrink: 0; }
+.ssl-th-bank     { flex: 1; min-width: 0; }
+.ssl-th-rate     { width: 90px; text-align: right; flex-shrink: 0; }
+.ssl-th-interest { width: 108px; text-align: right; flex-shrink: 0; }
+
+.ssl-thead span {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--m-muted);
+}
+
+.ssl-trow {
+  display: flex;
+  align-items: center;
+  padding: 11px 14px;
+  gap: 0;
+  border-bottom: 1px solid var(--m-divider);
+  transition: background var(--m-dur-micro);
+}
+.ssl-trow:last-child { border-bottom: none; }
+.ssl-trow:active { background: var(--m-subtle); }
+
+.ssl-trow.rank-1 {
+  background: #f5f5f2;
+  box-shadow: inset 2.5px 0 0 var(--m-ink);
+}
+.ssl-trow.rank-1 .ssl-bank-type {
+  background: var(--m-card);
+  border-color: var(--m-border);
+  color: var(--m-ink-secondary);
+}
+
+/* Rank */
+.ssl-rank {
+  width: 36px;
+  flex-shrink: 0;
+  font-size: 20px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+}
+.ssl-rank-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--m-subtle);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--m-muted);
+}
+
+/* Bank col */
+.ssl-bank-col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-right: 8px;
+}
+
+/* Logo */
+.ssl-bank-logo {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border: 1px solid var(--m-divider);
+  background: var(--m-card);
+}
+.ssl-bank-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Name + type stacked */
+.ssl-bank-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.ssl-bank-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--m-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.15px;
+  line-height: 1.2;
+}
+
+.ssl-bank-type {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  padding: 2px 7px;
+  border-radius: 5px;
+  align-self: flex-start;
+  line-height: 1.5;
+  background: var(--m-subtle);
+  color: var(--m-muted);
+  border: 1px solid var(--m-divider);
+}
+.ssl-trow.rank-1 .ssl-bank-type {
+  background: var(--m-card);
+  border-color: var(--m-border);
+  color: var(--m-ink-secondary);
+}
+
+/* Rate col */
+.ssl-rate-col {
+  width: 90px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0;
+}
+
+.ssl-rate-val {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--m-ink);
+  letter-spacing: -0.2px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.ssl-rate-year {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--m-muted);
+  margin-left: 1px;
+}
+
+/* Interest col */
+.ssl-interest-col {
+  width: 108px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+  margin-left: 24px;
+}
+
+.ssl-interest-amt {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--m-ink);
+  letter-spacing: -0.2px;
+  font-variant-numeric: tabular-nums;
+}
+
+
+/* ─── Updated stamp ─── */
+.ssl-updated {
+  padding: 10px 14px 12px;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--m-muted);
+  line-height: 1.5;
+  border-top: 1px solid var(--m-divider);
+}
+
+/* ─── Disclaimer ─── */
+.ssl-disclaimer {
+  font-size: 12px;
+  color: var(--m-muted);
+  line-height: 1.5;
+  padding: 0 2px;
+}
+
+/* ─── Footer CTA ─── */
+.ssl-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--m-ink-secondary);
+  text-decoration: none;
+  padding: 4px 0;
+  transition: color var(--m-dur-micro);
+}
+.ssl-cta:active { color: var(--m-green-dark); }
+
+.ssl-footer {
+  padding: 16px 14px 0;
+  text-align: center;
+  font-size: 11px;
+  color: var(--m-muted);
+}

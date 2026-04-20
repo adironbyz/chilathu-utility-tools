@@ -82,6 +82,11 @@ const DEFAULT_TOOL_AFFILIATES = {
     featured: 'vibmax',
     comparison: ['vibmax'],
   },
+  // Tier S+ — savings intent cao nhất (so sánh lãi suất = muốn gửi tiền)
+  'so-sanh-lai-suat': {
+    featured: 'vibmax',
+    comparison: ['vibmax'],
+  },
   // Tier A — utility intent gián tiếp
   'tinh-tien-dien': {
     featured: '',

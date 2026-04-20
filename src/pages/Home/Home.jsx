@@ -69,6 +69,16 @@ const TOOLS = [
     color: '#fef2f2',
     colorBorder: '#fca5a5',
   },
+  {
+    slug: 'so-sanh-lai-suat',
+    category: 'finance',
+    isNew: true,
+    emoji: '🏦',
+    label: 'So sánh lãi suất ngân hàng',
+    desc: '18+ ngân hàng — xem ngay nơi nào trả lãi cao nhất',
+    color: '#f0fdf4',
+    colorBorder: '#86efac',
+  },
 
   // Hóa đơn & tiện ích
   {
