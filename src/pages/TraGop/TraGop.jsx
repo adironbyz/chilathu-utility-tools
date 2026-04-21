@@ -6,6 +6,7 @@ import { HugeiconsIcon } from '@hugeicons/react'
 import { DashboardSquare01Icon, Link01Icon, LinkSquare01Icon } from '@hugeicons/core-free-icons'
 import { AffiliateBlock } from '../../components/affiliate/index.js'
 import '../../components/affiliate/Affiliate.css'
+import { trackAppCrosslink } from '../../lib/analytics.js'
 import './TraGop.css'
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -435,6 +436,7 @@ export default function TraGop() {
           href="https://app.chilathu.com?utm_source=tienich.chilathu.com&utm_medium=tool&utm_campaign=tragop_footer"
           target="_blank"
           rel="noopener noreferrer"
+          onClick={() => trackAppCrosslink('tra-gop', { campaign: 'tragop_footer' })}
         >
           Theo dõi thu chi với Chilathu.com
           <HugeiconsIcon icon={LinkSquare01Icon} size={14} color="currentColor" strokeWidth={1.5} />

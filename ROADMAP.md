@@ -52,7 +52,7 @@
 | Home page `/` | ✅ Done | Grid 8 tools + bills-app flagship card (UTM) |
 | Dynamic OG per tool | ⬜ Backlog | Cần Cloudflare Pages Functions — scope sau |
 | Nông nghiệp pricing | ⬜ Pending | Chờ ảnh QĐ 1279 trang nông nghiệp |
-| GA4 tracking | ✅ Live | Measurement ID `G-Z5P0XQWL0N` đã trong `index.html`. Event `affiliate_clicked` tự fire qua `trackAffiliateClick()` khi `AffiliateBlock` được plug vào. |
+| GA4 tracking | ✅ Live | Measurement ID `G-5BMHEBYFVQ` (property `chilathu-tools` — tách khỏi app.chilathu.com). Events: `affiliate_clicked` (via `trackAffiliateClick`), `tool_card_click` (home), `app_crosslink_click` (home + tool footers). Helper ở `src/lib/analytics.js`. |
 
 ---
 

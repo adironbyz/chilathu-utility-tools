@@ -77,7 +77,7 @@ Metric: "Lãi suất tiết kiệm 5.8%/năm, miễn phí chuyển khoản"
 
 Accesstrade thường duyệt 1-3 ngày. Trong lúc chờ, có thể làm sẵn:
 
-- [x] ~~**Setup GA4 property**~~ — đã done (`G-Z5P0XQWL0N` trong `index.html`). Event `affiliate_clicked` đã sẵn sàng fire.
+- [x] ~~**Setup GA4 property**~~ — đã done (`G-5BMHEBYFVQ` trong `index.html`, property riêng cho tienich tách khỏi app). Events: `affiliate_clicked`, `tool_card_click`, `app_crosslink_click`.
 - [ ] **Review disclosure copy** với Rog — mặc định đã có trong `AffiliateDisclosure` component. Accesstrade đôi khi yêu cầu wording cụ thể.
 - [ ] **Plug `<AffiliateBlock>` vào pilot tool** (TinhLuong) — dùng URL placeholder hiện tại. Click sẽ fire `affiliate_clicked` về GA4 → bắt đầu thu CTR data ngay kể cả trước khi campaign duyệt.
 - [ ] **Decide pilot tool**: plan đề xuất TinhLuong. Có thể đổi nếu GA4 data cho thấy traffic tập trung vào tool khác.

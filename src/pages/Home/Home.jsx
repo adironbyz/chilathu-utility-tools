@@ -4,6 +4,7 @@ import { HugeiconsIcon } from '@hugeicons/react'
 import { ArrowRight01Icon, LinkSquare01Icon } from '@hugeicons/core-free-icons'
 import { Logo } from '../../components/Logo.jsx'
 import SEO from '../../components/SEO.jsx'
+import { trackToolCardClick, trackAppCrosslink } from '../../lib/analytics.js'
 import './Home.css'
 
 const UTM = '?utm_source=tienich.chilathu.com&utm_medium=hub&utm_campaign=tools_home'
@@ -209,7 +210,14 @@ export default function Home() {
                   <ToolCard
                     key={tool.slug}
                     tool={tool}
-                    onClick={() => navigate(`/${tool.slug}`)}
+                    onClick={() => {
+                      trackToolCardClick(tool.slug, {
+                        section: tool.category,
+                        isPopular: !!tool.popular,
+                        isNew: !!tool.isNew,
+                      })
+                      navigate(`/${tool.slug}`)
+                    }}
                   />
                 ))}
               </div>
@@ -223,7 +231,14 @@ export default function Home() {
                 <ToolCard
                   key={tool.slug}
                   tool={tool}
-                  onClick={() => navigate(`/${tool.slug}`)}
+                  onClick={() => {
+                    trackToolCardClick(tool.slug, {
+                      section: tool.category,
+                      isPopular: !!tool.popular,
+                      isNew: !!tool.isNew,
+                    })
+                    navigate(`/${tool.slug}`)
+                  }}
                 />
               ))}
             </div>
@@ -241,6 +256,7 @@ export default function Home() {
               href={BILLS_URL}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackAppCrosslink('home', { campaign: 'tools_home' })}
             >
               <img
                 className="home-app-icon"

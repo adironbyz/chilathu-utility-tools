@@ -4,6 +4,7 @@ import { Logo } from '../../components/Logo.jsx'
 import SEO from '../../components/SEO.jsx'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { DashboardSquare01Icon, Copy01Icon, LinkSquare01Icon } from '@hugeicons/core-free-icons'
+import { trackAppCrosslink } from '../../lib/analytics.js'
 import './ChiaTien.css'
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -603,6 +604,7 @@ export default function ChiaTien() {
           href="https://app.chilathu.com?utm_source=tienich.chilathu.com&utm_medium=tool&utm_campaign=chiaTien_footer"
           target="_blank"
           rel="noopener noreferrer"
+          onClick={() => trackAppCrosslink('chia-tien', { campaign: 'chiaTien_footer' })}
         >
           Theo dõi thu chi với Chilathu.com
           <HugeiconsIcon icon={LinkSquare01Icon} size={14} color="currentColor" strokeWidth={1.5} />
