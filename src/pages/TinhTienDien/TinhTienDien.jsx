@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   rates,
@@ -11,7 +11,7 @@ import { Logo } from '../../components/Logo.jsx'
 import SEO from '../../components/SEO.jsx'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { DashboardSquare01Icon, Link01Icon, LinkSquare01Icon } from '@hugeicons/core-free-icons'
-import { trackAppCrosslink } from '../../lib/analytics.js'
+import { trackAppCrosslink, trackToolCalculateDone } from '../../lib/analytics.js'
 import './TinhTienDien.css'
 
 // ─── Constants ───────────────────────────────────────────────
@@ -335,6 +335,15 @@ export default function TinhTienDien() {
   })()
 
   const isUnavailable = hasInput && result === null
+
+  // ── Fire calculate_done event once per session ──
+  const calcFiredRef = useRef(false)
+  useEffect(() => {
+    if (result && !calcFiredRef.current) {
+      trackToolCalculateDone('tinh-tien-dien')
+      calcFiredRef.current = true
+    }
+  }, [result])
 
   // ── Warning ──
   const showWarning = !isTOU && totalKwh > 9999

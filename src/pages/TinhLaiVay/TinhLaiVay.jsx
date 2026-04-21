@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Logo } from '../../components/Logo.jsx'
 import SEO from '../../components/SEO.jsx'
@@ -6,7 +6,7 @@ import { HugeiconsIcon } from '@hugeicons/react'
 import { DashboardSquare01Icon, Link01Icon, LinkSquare01Icon } from '@hugeicons/core-free-icons'
 import { AffiliateBlock } from '../../components/affiliate/index.js'
 import '../../components/affiliate/Affiliate.css'
-import { trackAppCrosslink } from '../../lib/analytics.js'
+import { trackAppCrosslink, trackToolCalculateDone } from '../../lib/analytics.js'
 import './TinhLaiVay.css'
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -311,6 +311,15 @@ export default function TinhLaiVay() {
 
   const visibleRows = expanded ? rows : rows.slice(0, TABLE_PREVIEW)
   const hiddenCount = rows.length - TABLE_PREVIEW
+
+  // Fire `tool_calculate_done` 1 lần khi user lần đầu có result valid trong session.
+  const calcFiredRef = useRef(false)
+  useEffect(() => {
+    if (valid && rows.length > 0 && !calcFiredRef.current) {
+      trackToolCalculateDone('tinh-lai-vay')
+      calcFiredRef.current = true
+    }
+  }, [valid, rows.length])
 
   const handleShare = useCallback(() => {
     const params = { mode, p: principal, r: rateStr, t: termStr }

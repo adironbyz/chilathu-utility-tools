@@ -1,11 +1,11 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { provinces, calcWater, formatVND } from '../../data/waterRates.js'
 import { Logo } from '../../components/Logo.jsx'
 import SEO from '../../components/SEO.jsx'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { DashboardSquare01Icon, Link01Icon, LinkSquare01Icon, UserIcon } from '@hugeicons/core-free-icons'
-import { trackAppCrosslink } from '../../lib/analytics.js'
+import { trackAppCrosslink, trackToolCalculateDone } from '../../lib/analytics.js'
 import './TinhTienNuoc.css'
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -211,6 +211,15 @@ export default function TinhTienNuoc() {
     : null
 
   const hasPartialData = !province.pending && province[type]?.partialData
+
+  // ── Fire calculate_done event once per session ──
+  const calcFiredRef = useRef(false)
+  useEffect(() => {
+    if (result && !calcFiredRef.current) {
+      trackToolCalculateDone('tinh-tien-nuoc')
+      calcFiredRef.current = true
+    }
+  }, [result])
 
   // ── Share ──
   const handleShare = useCallback(() => {

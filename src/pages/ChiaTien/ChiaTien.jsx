@@ -4,7 +4,7 @@ import { Logo } from '../../components/Logo.jsx'
 import SEO from '../../components/SEO.jsx'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { DashboardSquare01Icon, Copy01Icon, LinkSquare01Icon } from '@hugeicons/core-free-icons'
-import { trackAppCrosslink } from '../../lib/analytics.js'
+import { trackAppCrosslink, trackToolCalculateDone } from '../../lib/analytics.js'
 import './ChiaTien.css'
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -232,6 +232,18 @@ export default function ChiaTien() {
 
   const totalExpenses = expenses.reduce((s, e) => s + e.amount, 0)
   const memberName = id => members.find(m => m.id === id)?.name || '?'
+
+  // ── Fire calculate_done event once per session (either mode) ──
+  const calcFiredRef = useRef(false)
+  const hasResult =
+    (splitMode === 'even' && perPerson > 0) ||
+    (splitMode === 'item' && members.length >= 2 && expenses.length > 0)
+  useEffect(() => {
+    if (hasResult && !calcFiredRef.current) {
+      trackToolCalculateDone('chia-tien')
+      calcFiredRef.current = true
+    }
+  }, [hasResult])
 
   // ── Share / copy ─────────────────────────────────────────────────────────────
 

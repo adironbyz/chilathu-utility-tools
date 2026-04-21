@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Logo } from '../../components/Logo.jsx'
 import SEO from '../../components/SEO.jsx'
@@ -6,7 +6,7 @@ import { HugeiconsIcon } from '@hugeicons/react'
 import { DashboardSquare01Icon, LinkSquare01Icon } from '@hugeicons/core-free-icons'
 import { AffiliateBlock } from '../../components/affiliate/index.js'
 import '../../components/affiliate/Affiliate.css'
-import { trackAppCrosslink } from '../../lib/analytics.js'
+import { trackAppCrosslink, trackToolCalculateDone } from '../../lib/analytics.js'
 import './SoSanhLaiSuat.css'
 
 // ─── Bank data ────────────────────────────────────────────────────────────────
@@ -162,6 +162,15 @@ export default function SoSanhLaiSuat() {
   const topRate  = ranked[0]?.rate ?? 0
   const topBank  = ranked[0]
   const termLabel = TERMS.find(t => t.val === term)?.label ?? `${term} tháng`
+
+  // ── Fire calculate_done event once per session ──
+  const calcFiredRef = useRef(false)
+  useEffect(() => {
+    if (valid && !calcFiredRef.current) {
+      trackToolCalculateDone('so-sanh-lai-suat')
+      calcFiredRef.current = true
+    }
+  }, [valid])
 
   return (
     <div className="ssl-page notebook-bg">

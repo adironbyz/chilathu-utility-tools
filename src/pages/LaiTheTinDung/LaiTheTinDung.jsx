@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Logo } from '../../components/Logo.jsx'
 import SEO from '../../components/SEO.jsx'
@@ -6,7 +6,7 @@ import { HugeiconsIcon } from '@hugeicons/react'
 import { DashboardSquare01Icon, Link01Icon, LinkSquare01Icon } from '@hugeicons/core-free-icons'
 import { AffiliateBlock } from '../../components/affiliate/index.js'
 import '../../components/affiliate/Affiliate.css'
-import { trackAppCrosslink } from '../../lib/analytics.js'
+import { trackAppCrosslink, trackToolCalculateDone } from '../../lib/analytics.js'
 import './LaiTheTinDung.css'
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -138,6 +138,15 @@ export default function LaiTheTinDung() {
   const hasFourCols   = mode !== 'none'
 
   const showResult = valid && !paymentTooLow && !noCustomAmt && rows.length > 0
+
+  // ── Fire calculate_done event once per session ──
+  const calcFiredRef = useRef(false)
+  useEffect(() => {
+    if (showResult && !calcFiredRef.current) {
+      trackToolCalculateDone('lai-the-tin-dung')
+      calcFiredRef.current = true
+    }
+  }, [showResult])
 
   const handleShare = useCallback(() => {
     const url = encodeShareUrl(balance, rateStr, mode, custPmt, viewMonths)

@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Logo } from '../../components/Logo.jsx'
 import SEO from '../../components/SEO.jsx'
@@ -6,7 +6,7 @@ import { HugeiconsIcon } from '@hugeicons/react'
 import { DashboardSquare01Icon, Link01Icon, LinkSquare01Icon } from '@hugeicons/core-free-icons'
 import { AffiliateBlock } from '../../components/affiliate/index.js'
 import '../../components/affiliate/Affiliate.css'
-import { trackAppCrosslink } from '../../lib/analytics.js'
+import { trackAppCrosslink, trackToolCalculateDone } from '../../lib/analytics.js'
 import './TraGop.css'
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -164,6 +164,15 @@ export default function TraGop() {
     ? calcEffectiveAPR(price, monthlyPayment, months) : 0
 
   const modeHint = MODES.find(m => m.id === mode)?.hint
+
+  // ── Fire calculate_done event once per session ──
+  const calcFiredRef = useRef(false)
+  useEffect(() => {
+    if (valid && rows.length > 0 && !calcFiredRef.current) {
+      trackToolCalculateDone('tra-gop')
+      calcFiredRef.current = true
+    }
+  }, [valid, rows.length])
 
   const handleShare = useCallback(() => {
     const params = { m: mode, p: price, t: termStr }

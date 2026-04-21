@@ -4,7 +4,7 @@ import { Logo } from '../../components/Logo.jsx'
 import SEO from '../../components/SEO.jsx'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { DashboardSquare01Icon, Copy01Icon, LinkSquare01Icon } from '@hugeicons/core-free-icons'
-import { trackAppCrosslink } from '../../lib/analytics.js'
+import { trackAppCrosslink, trackToolCalculateDone } from '../../lib/analytics.js'
 import './DuLich.css'
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -210,6 +210,15 @@ export default function DuLich() {
 
   const catEmoji = id => CATEGORIES.find(c => c.id === id)?.emoji || '📦'
   const catLabel = id => CATEGORIES.find(c => c.id === id)?.label || 'Khác'
+
+  // ── Fire calculate_done event once per session ──
+  const calcFiredRef = useRef(false)
+  useEffect(() => {
+    if (totalVND > 0 && !calcFiredRef.current) {
+      trackToolCalculateDone('chi-phi-du-lich')
+      calcFiredRef.current = true
+    }
+  }, [totalVND])
 
   return (
     <div className="dl-page notebook-bg">

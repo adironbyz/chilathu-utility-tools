@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { calcNet, formatVND } from '../../data/salaryRates.js'
 import { Logo } from '../../components/Logo.jsx'
@@ -7,7 +7,7 @@ import { HugeiconsIcon } from '@hugeicons/react'
 import { DashboardSquare01Icon, Link01Icon, LinkSquare01Icon, UserIcon } from '@hugeicons/core-free-icons'
 import { AffiliateBlock } from '../../components/affiliate/index.js'
 import '../../components/affiliate/Affiliate.css'
-import { trackAppCrosslink } from '../../lib/analytics.js'
+import { trackAppCrosslink, trackToolCalculateDone } from '../../lib/analytics.js'
 import './TinhLuong.css'
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -230,6 +230,15 @@ export default function TinhLuong() {
 
   // Tổng lương thỏa thuận (hiển thị ngay trong input card)
   const totalAgreedPreview = gross + allowances + bonus
+
+  // Fire `tool_calculate_done` 1 lần khi user lần đầu có result valid trong session.
+  const calcFiredRef = useRef(false)
+  useEffect(() => {
+    if (result && !calcFiredRef.current) {
+      trackToolCalculateDone('tinh-luong')
+      calcFiredRef.current = true
+    }
+  }, [result])
 
   const handleShare = useCallback(() => {
     const url = encodeShareUrl(grossInput, allowancesInput, bonusInput, dependents)
